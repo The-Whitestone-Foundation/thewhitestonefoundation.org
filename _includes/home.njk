@@ -1,0 +1,18 @@
+--- 
+layout: base.njk
+--- 
+<section class="hero">
+<div class="row align-items-end">
+<div class="col-lg-8">
+<h1>{{title}}</h1>
+</div>
+<div class="col-lg-4">
+<p>{{description}}</p>
+</div>
+</div>
+</section>
+<div class="col-md-12 p-3 article-content">
+{{content|safe}}
+</div>
+{% include "partials/post_list.njk" %}
+    

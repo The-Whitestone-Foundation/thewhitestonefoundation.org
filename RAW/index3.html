@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Whitestone Foundation | High-End Editorial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+   <link href="main.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="sidebar-overlay"></div>
+
+    <aside id="sidebar">
+        <nav>
+            <a href="#" class="nav-link-custom">Journal</a>
+            <a href="#" class="nav-link-custom">Foundation</a>
+            <a href="#" class="nav-link-custom">Scholars</a>
+            <a href="#" class="nav-link-custom">Contact</a>
+        </nav>
+    </aside>
+
+    <div id="page-wrapper">
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center">
+                <button class="btn-menu" id="openMenu">
+                    <svg width="30" height="10" viewBox="0 0 30 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="1" fill="black"/>
+                        <rect y="9" width="20" height="1" fill="black"/>
+                    </svg>
+                    Menu
+                </button>
+                <a href="#" class="brand">Whitestone</a>
+                <div style="width: 50px;"></div> </header>
+
+            <section class="hero">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <h1>Fostering critical thought for the public interest.</h1>
+                    </div>
+                    <div class="col-lg-4">
+                        <p>Independent research, peer-reviewed journals, and a global network of scholars dedicated to the evolution of culture.</p>
+                    </div>
+                </div>
+            </section>
+
+            <main class="py-5 mt-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-4">
+                        <a href="#" class="article-card">
+                            <div class="img-container">
+                                <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=800" alt="Culture">
+                            </div>
+                            <span>Journal • Vol 24</span>
+                            <h3>The Digital Insurrection: Aesthetics and Politics</h3>
+                            <p>An exploration of how visual culture shapes modern political movements and individual identity.</p>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <a href="#" class="article-card">
+                            <div class="img-container">
+                                <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800" alt="Scholar">
+                            </div>
+                            <span>Editorial • Feb 2026</span>
+                            <h3>Neoliberalism and its Discontents</h3>
+                            <p>A critical analysis of economic structures and their impact on sovereign states in the 21st century.</p>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <a href="#" class="article-card">
+                            <div class="img-container">
+                                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=800" alt="Books">
+                            </div>
+                            <span>Archive • Theory</span>
+                            <h3>Critical Theory in the Age of Intelligence</h3>
+                            <p>How artificial intelligence is redefining the boundaries of academic research and ethical publication.</p>
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="text-center">
+                <p>&copy; 2026 The Whitestone Foundation. All Rights Reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const openBtn = document.getElementById('openMenu');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleMenu() {
+            body.classList.toggle('sidebar-open');
+        }
+
+        openBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+</body>
+</html>

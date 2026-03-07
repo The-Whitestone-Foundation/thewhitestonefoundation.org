@@ -1,0 +1,36 @@
+---
+layout: base.njk
+title: Search
+permalink: /search/
+---
+
+<section class="search">
+  <h2>Search the Site</h2>
+  <div id="search"></div>
+  <p id="search-status" class="search-help" hidden>Search index not found yet. Run `npm run build` to generate Pagefind.</p>
+</section>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    if (typeof PagefindUI === "undefined") {
+      const status = document.getElementById("search-status");
+      if (status) status.hidden = false;
+      return;
+    }
+    new PagefindUI({
+      element: "#search",
+      showImages: false,
+      processResult: (result) => {
+        if (result?.meta?.title) {
+          result.title = result.meta.title;
+        }
+        if (result?.meta?.description) {
+          result.excerpt = result.meta.description;
+        }
+        return result;
+      },
+    });
+  });
+</script>

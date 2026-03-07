@@ -1,0 +1,42 @@
+---js
+{
+  pagination: {
+    data: "collections",
+    size: 1,
+    alias: "tag",
+    filter: ["all", "posts", "higherEd", "authors", "archivesIndex"],
+    addAllPagesToCollections: true
+  },
+  layout: "base.njk",
+  eleventyExcludeFromCollections: true,
+  eleventyComputed: {
+    title: "Tagged '{{ tag }}'",
+    permalink: function(data) {
+      return `/tags/${this.slugify(data.tag)}/`;
+    }
+  }
+}
+---
+
+<section class="container">
+
+  <div class="border-bottom pb-4 mb-5">
+    <h1 class="display-5 fw-bold text-capitalize">
+      Topic: <span class="text-secondary">{{ tag }}</span>
+    </h1>
+    <p class="text-secondary">Showing {{ collections[tag].length }} articles found in this category.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-10">
+      {% set postslist = collections[tag] %}
+      {% include "postslist.njk" %}
+    </div>
+  </div>
+
+  <div class="mt-5 pt-5 border-top">
+    <a href="/tags/" class="btn btn-link ps-0 text-secondary fw-bold text-decoration-none">
+      &larr; Back to all tags
+    </a>
+  </div>
+</section>

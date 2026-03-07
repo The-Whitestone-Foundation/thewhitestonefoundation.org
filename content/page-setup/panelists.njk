@@ -1,0 +1,67 @@
+---
+layout: base.njk
+title: "Panelists"
+categories:
+tags:
+image: /images/wp-content/uploads/2021/08/Whitestone-logo.png
+permalink: /panelists/
+info: |
+  #### The following are panelists for the Whitestone Foundation’s Thought Leader Symposium #1 entitled [“The Existential Crisis of Learning and the Future of the Knowledge Economy” ](/events/)on Nov. 12, 2025.
+---
+
+{{info | md | safe}}
+
+<section class="container py-5">
+  <div class="row g-5">
+    {% for person in panelists.list %}
+    <div class="col-md-6 col-lg-4">
+      <div class="panelist-item h-100 d-flex flex-column border-bottom pb-5">
+        
+        <div class="position-relative overflow-hidden mb-4 shadow-sm" style="aspect-ratio: 1/1;">
+          <img src="{{ person.photo }}" 
+               alt="{{ person.name }}" 
+               class="img-fluid w-100 h-100 shadow" 
+               style="object-fit: cover; transition: transform 0.5s ease;"
+               onmouseover="this.style.transform='scale(1.05)'"
+               onmouseout="this.style.transform='scale(1)'"
+               loading="lazy">
+        </div>
+
+        <div class="panelist-info">
+          <h2 class="h3 fw-bold mb-3" style="font-family: 'Tenor Sans', serif; letter-spacing: -0.5px;">
+            {{ person.name }}
+          </h2>
+          
+          <div class="description text-secondary" style="line-height: 1.6; font-size: 0.95rem;">
+            {{ person.description | stripHtml | safe }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center">
+      <p class="text-muted">No panelists found.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .panelist-item {
+    transition: all 0.3s ease;
+  }
+  .description a {
+    color: var(--text-main, #000);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .description a:hover {
+    opacity: 0.7;
+  }
+  .description p {
+    margin-bottom: 1rem;
+  }
+</style>

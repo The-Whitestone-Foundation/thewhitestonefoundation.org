@@ -1,0 +1,75 @@
+---js
+{
+  pagination: {
+    data: "collections.posts",
+    size: 1,
+    alias: "category",
+    before: function(paginationData) {
+      const categories = new Set();
+      paginationData.forEach(item => {
+        (item.data.categories || []).forEach(cat => categories.add(cat));
+      });
+      return Array.from(categories);
+    }
+  },
+  layout: "base.njk",
+  eleventyExcludeFromCollections: true,
+  eleventyComputed: {
+    title: "Category: {{ category }}",
+    permalink: function(data) {
+      return `/categories/${this.slugify(data.category)}/`;
+    }
+  }
+}
+---
+<section class="container py-5">
+  <div class="mb-5">
+    <h1 class="display-5 fw-bold text-capitalize border-bottom pb-3">
+      Topic: {{ category }}
+    </h1>
+  </div>
+
+  <div class="row g-4 mt-4">
+    {% for p in collections.posts | reverse %}
+      {% if category in p.data.categories %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ p.url }}" class="article-card text-decoration-none text-secondary h-100 d-block">
+          <div class="img-container mb-3" style="aspect-ratio: 16/9; overflow: hidden; border-radius: 8px;">
+            <img src="{{ p.data.image or metadata.image }}" 
+                 alt="{{ p.data.title }}" 
+                 class="img-fluid w-100 h-100" 
+                 style="object-fit: cover;">
+          </div>
+          
+          <div class="article-meta mb-2">
+            <span class="text-uppercase small fw-bold text-secondary">
+              {{ category }} • {{ p.date | readableDate }}
+            </span>
+          </div>
+
+          <h3 class="h5 fw-bold mb-2" style="font-family: 'Tenor Sans', serif;">
+            {{ p.data.title }}
+          </h3>
+
+          <p class="text-secondary small">
+            {{ p.data.description or p.content | stripHtml | firstWords(25) }}...
+          </p>
+        </a>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="mt-5 pt-4 border-top">
+    <a href="/categories/" class="btn btn-dark">&larr; Back to all categories</a>
+  </div>
+</section>
+
+<style>
+  .article-card { transition: transform 0.3s ease; }
+  .article-card:hover { transform: translateY(-5px); }
+  .article-card h3 { transition: color 0.3s ease; }
+  .article-card:hover h3 { color: #555; }
+  .img-container img { transition: transform 0.5s ease; }
+  .article-card:hover .img-container img { transform: scale(1.05); }
+</style>

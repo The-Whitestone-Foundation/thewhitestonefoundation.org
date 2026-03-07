@@ -1,0 +1,22 @@
+{
+  "name": "thewhitestonefoundation-11ty",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx @11ty/eleventy --serve",
+    "build": "npx @11ty/eleventy && npx pagefind --site _site --glob \"**/*.html\""
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-navigation": "^1.0.5",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "eleventy-plugin-toc": "^1.1.5",
+    "luxon": "^3.5.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-attrs": "^4.3.1",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-table-of-contents": "^0.8.0",
+    "pagefind": "^1.4.0"
+  }
+}

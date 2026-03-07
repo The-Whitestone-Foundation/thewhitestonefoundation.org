@@ -1,0 +1,36 @@
+<div class="col-md-7">
+            <form action="{{metadata.formspree_id}}" method="POST" class="contact-form">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="name" class="form-label-small">Name</label>
+                        <input type="text" id="name" name="name" class="form-control-custom" autocomplete="name" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="email" class="form-label-small">Email</label>
+                        <input type="email" id="email" name="email" class="form-control-custom" autocomplete="email" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="subject" class="form-label-small">Subject</label>
+                    <input type="text" id="subject" name="subject" class="form-control-custom" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="website" class="form-label-small">Website (Optional)</label>
+                    <input type="url" id="website" name="website" class="form-control-custom" placeholder="https://">
+                </div>
+
+                <div class="mb-4">
+                    <label for="message" class="form-label-small">Message</label>
+                    <textarea id="message" name="message" rows="5" class="form-control-custom" required></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="bio" class="form-label-small">Short Bio</label>
+                    <textarea id="bio" name="bio" rows="2" class="form-control-custom" placeholder="Briefly tell us about yourself..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-send">Send Message</button>
+            </form>
+        </div>

@@ -1,0 +1,10 @@
+---
+permalink: /feed/twtxt.txt
+---
+
+# twtxt feed for {{ metadata.title }}
+
+{% for post in collections.posts %}
+{%- set baseUrl = metadata.url | baseUrl -%}
+{{ post.date.toISOString() }}	{{ post.url | absUrl(baseUrl) }} — {{ post.data.title }}
+{% endfor %}

@@ -1,0 +1,36 @@
+---
+layout: base.njk
+title: "Categories"
+description: "Explore our content by major editorial categories"
+permalink: /categories/
+---
+
+<section class="container py-5">
+  <div class="row mb-5">
+    <div class="col-lg-8">
+      <h1 class="display-4 fw-bold" style="font-family: 'Tenor Sans', serif;">{{ title }}</h1>
+      <p class="lead text-secondary">{{description}}.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    {% for cat in collections.posts | getAllCategories %}
+      {% set catUrl %}/categories/{{ cat | slugify }}/{% endset %}
+      <div class="col-md-4">
+        <a href="{{ catUrl }}" class="card h-100 text-decoration-none border-0 shadow-sm bg-light hover-shadow transition">
+          <div class="card-body p-4">
+            <h2 class="h5 fw-bold text-dark mb-0 text-capitalize">{{ cat }}</h2>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .hover-shadow:hover { 
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px var(--border-color) !important;
+  }
+  .transition { transition: all 0.3s ease; }
+</style>

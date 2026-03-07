@@ -1,0 +1,28 @@
+<aside id="sidebar">
+  <nav>
+    {% for item in metadata.sidebar.list %}
+      {% if item.is_dropdown %}
+        <div class="nav-dropdown-wrapper">
+<div class="nav-link-custom dropdown-trigger" role="button" aria-expanded="false" tabindex="0">
+            {{ item.label }} <i class="fas fa-chevron-down ms-auto" style="font-size: 0.7rem;"></i>
+          </div>
+          <ul class="dropdown-menu-list mb-3">
+            {% for sub in item.info %}
+              <li class="mt-1 mb-1"><a href="{{ sub.url }}" class="nav-sub-link">{{ sub.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% else %}
+        <a href="{{ item.url }}" class="nav-link-custom">{{ item.label }}</a>
+      {% endif %}
+    {% endfor %}
+    
+    <button id="theme-toggle" class="btn-theme" aria-label="Toggle Dark Mode">
+  <div class="theme-icon-wrapper">
+    <i class="fas fa-sun icon-sun"></i>
+    <i class="fas fa-moon icon-moon"></i>
+  </div>
+  <span class="theme-text text-uppercase small tracking-widest">Theme</span>
+</button>
+  </nav>
+</aside>

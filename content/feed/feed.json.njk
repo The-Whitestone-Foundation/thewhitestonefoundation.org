@@ -1,0 +1,28 @@
+---
+permalink: /feed/feed.json
+---
+
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "{{ metadata.title }}",
+  {% set baseUrl = metadata.url | baseUrl %}
+  "home_page_url": "{{ '/' | absUrl(baseUrl) }}",
+  "feed_url": "{{ '/feed/feed.json' | absUrl(baseUrl) }}",
+  "items": [
+    {% for post in collections.posts %}
+    {
+      "id": "{{ post.url | absUrl(baseUrl) }}",
+      "url": "{{ post.url | absUrl(baseUrl) }}",
+      "title": "{{ post.data.title }}",
+      "content_text": "{{ post.data.description }}",
+      "date_published": "{{ post.date.toISOString() }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "_schema": {
+    "@context": "https://schema.org",
+    "@type": "DataFeed",
+    "name": "{{ metadata.title }} Feed",
+    "url": "{{ '/feed/feed.json' | absUrl(baseUrl) }}"
+  }
+}

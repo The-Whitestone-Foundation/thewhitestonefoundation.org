@@ -1,0 +1,18 @@
+<header class="d-flex justify-content-between align-items-center">
+<button class="btn-menu" id="openMenu" aria-label="Open navigation menu">
+<svg width="30" height="10" viewBox="0 0 30 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="30" height="1" fill="currentColor"/>
+<rect y="9" width="20" height="1" fill="currentColor"/>
+</svg>
+<span class="ms-2">Menu</span>
+</button>
+<a href="{{ metadata.url }}" class="brand d-flex align-items-center text-decoration-none">
+<img src="{{ metadata.sidebar.logo }}" alt="Logo" width="30" height="30" class="me-2">
+{{metadata.sidebar.title}}
+</a>
+<div class="header-socials">
+{% for link in metadata.social %}
+<a href="{{ link.url }}" class="social-link ms-3" title="{{ link.label }}"><i class="{{ link.icon }}"></i></a>
+{% endfor %}
+</div>
+</header>

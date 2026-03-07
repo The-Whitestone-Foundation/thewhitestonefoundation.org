@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+{% include "partials/seo.njk" %}
+</head>
+<body>
+<div id="sidebar-overlay"></div>
+{% include "partials/sidebar.njk" %}
+<main id="page-wrapper">
+<div class="container">
+{% include "partials/header.njk" %}
+<article class="standard-content mt-5">
+{{content|safe}}
+</article>
+{% include "partials/footer.njk" %}
+</div>
+</main>
+{% include "partials/scripts.njk" %}
+<script src="/js/script.js" defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+media="print" onload="this.media='all'">
+</body>
+</html>

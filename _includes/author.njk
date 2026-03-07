@@ -1,0 +1,82 @@
+---
+layout: base.njk
+---
+
+<section class="container py-5">
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-8 text-center">
+      <div class="mb-4 mx-auto shadow-sm" style="width: 160px; height: 160px; border-radius: 50%; overflow: hidden; border: 4px solid #f8f9fa;">
+        <img src="{{ image or metadata.image }}" 
+        class="w-100 h-100" style="object-fit: cover;" alt="{{ name }}">
+      </div>
+      <h1 class="serif display-5 mb-1">{{ name }}</h1>
+      <p class="text-uppercase small tracking-widest text-secondary mb-4">{{ role }}</p>
+      
+      
+      <div class="author-bio lead text-secondary px-md-5 mb-4">
+        {{ content | safe }}
+      </div>
+      
+      
+      <div class="d-flex justify-content-center flex-wrap gap-4 fs-4 mt-2">
+        {% if orcid %}
+        <a href="https://orcid.org/{{ orcid }}" class="text-secondary v-social-link" title="ORCID Profile" target="_blank" rel="noopener">
+          <i class="fab fa-orcid" style="color: #A6CE39;"></i>
+        </a>
+        {% endif %}
+        {% for link in social %}
+        <a href="{{ link.url }}" class="v-social-link" title="{{ link.title }}" target="_blank" rel="noopener">
+          <i class="{{ link.icon }}"></i>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5 opacity-25">
+  <div class="author-work-section">
+    <h3 class="serif mb-5 text-center">Publications & Articles</h3>
+    
+    <div class="row g-4">
+  {% set authorPosts = collections.posts | reverse %}
+  {% set count = 0 %}
+
+  {% for p in authorPosts %}
+    {% if p.data.author == key %}
+      {% set count = count + 1 %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ p.url }}" class="v-article-card text-decoration-none text-secondary d-block h-100">
+          <div class="v-img-frame mb-3 rounded shadow-sm" style="aspect-ratio: 16/9; overflow: hidden;">
+            <img src="{{ p.data.image or metadata.image }}" class="w-100 h-100" style="object-fit: cover;">
+          </div>
+          <div class="small text-secondary mb-2">{{ p.date | readableDate }}</div>
+          <h3 class="h6 fw-bold serif lh-base">{{ p.data.title }}</h3>
+          <p>{{p.data.description}}</p>
+        </a>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% if count == 0 %}
+    <div class="col-12 text-center py-5 border rounded bg-light">
+      <p class="text-secondary mb-0">No articles published by <strong>{{ name }}</strong> yet.</p>
+      <small>Ensure your post has <code>author: {{ key }}</code> in the front matter.</small>
+    </div>
+  {% endif %}
+</div>
+    
+  </div>
+</section>
+
+<style>
+  .v-social-link { transition: transform 0.2s ease, opacity 0.2s ease; }
+  .v-social-link:hover { transform: translateY(-3px); opacity: 0.7; }
+  
+  .v-article-card { transition: all 0.3s ease; }
+  .v-img-frame img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  .v-article-card:hover .v-img-frame img { transform: scale(1.08); }
+  .v-article-card:hover h4 { color: var(--text-main);
+     text-decoration: underline; }
+
+  .tracking-widest { letter-spacing: 0.15em; }
+</style>

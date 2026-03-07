@@ -1,0 +1,16 @@
+<div class="row mt-4">
+{% for p in collections.posts | reverse %}
+<div class="col-md-6 col-lg-4">
+<a href="{{ p.url }}" class="article-card">
+<div class="img-container">
+<img src="{{ p.data.image or metadata.image }}" alt="{{ p.data.title }}">
+</div>
+<div class="article-meta">
+<span>{{ p.data.category }} • {{ p.date.toDateString() }}</span>
+</div>
+<h3>{{ p.data.title }}</h3>
+<p>{{ p.data.description or p.content | striptags | truncate(150)}}</p>
+</a>
+</div>
+{% endfor %}
+</div>

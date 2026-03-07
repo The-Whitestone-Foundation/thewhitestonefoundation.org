@@ -1,0 +1,26 @@
+---
+layout: base.njk
+title: "All Tags"
+description: "Explore articles by topic with our comprehensive tag index."
+permalink: /tags/
+---
+
+<section class="container py-5">
+  <div class="row mb-5">
+    <div class="col-lg-8">
+      <h1 class="display-4 fw-bold" 
+      style="font-family: 'Tenor Sans', serif;">{{ title }}</h1>
+      <p class="lead text-secondary">{{description}}</p>
+    </div>
+  </div><hr/>
+
+  <div class="d-flex flex-wrap mt-5 gap-2">
+    {% for tag in collections | getKeys | filterTagList %}
+      {% set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
+      <a href="{{ tagUrl }}" class="btn btn-dark rounded-pill px-4 py-2 text-capitalize">
+        {{ tag }} 
+        <span class="badge bg-dark ms-2">{{ collections[tag].length }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>

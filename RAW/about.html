@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | The Whitestone Foundation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Tambahan style khusus untuk Dropdown Sidebar agar sesuai keinginan lo */
+        .nav-dropdown-wrapper {
+            margin-bottom: 15px;
+        }
+        .dropdown-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .dropdown-menu-list {
+            display: none; /* Hidden by default */
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 10px;
+            border-left: 1px solid #eee;
+        }
+        .dropdown-menu-list a {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .dropdown-menu-list a:hover {
+            color: var(--accent);
+        }
+        .rotate {
+            transform: rotate(180deg);
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar-overlay"></div>
+
+    <aside id="sidebar">
+        <nav>
+            <a href="/" class="nav-link-custom">Home</a>
+            <a href="/mission" class="nav-link-custom">Mission</a>
+            
+            <div class="nav-dropdown-wrapper">
+                <div class="nav-link-custom dropdown-trigger">
+                    Events <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                </div>
+                <ul class="dropdown-menu-list">
+                    <li><a href="/higher-ed">Higher Ed</a></li>
+                    <li><a href="/videos">Videos</a></li>
+                    <li><a href="/panelists">Panelists</a></li>
+                </ul>
+				<button id="theme-toggle" class="btn-theme" aria-label="Toggle Dark Mode">
+    <i class="fas fa-moon"></i>
+</button>
+            </div>
+
+            <div class="nav-dropdown-wrapper">
+                <div class="nav-link-custom dropdown-trigger">
+                    Search <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                </div>
+                <ul class="dropdown-menu-list">
+                    <li><a href="/search">Site Search</a></li>
+                    <li><a href="/metadata">Metadata Search</a></li>
+                </ul>
+            </div>
+
+            <a href="/news" class="nav-link-custom">News</a>
+            <a href="/people" class="nav-link-custom">People</a>
+            <a href="/contact" class="nav-link-custom">Contact</a>
+        </nav>
+    </aside>
+
+    <div id="page-wrapper">
+        <div class="container">
+            
+            <header class="d-flex justify-content-between align-items-center">
+                <button class="btn-menu" id="openMenu">
+                    <svg width="30" height="10" viewBox="0 0 30 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="1" fill="black"/>
+                        <rect y="9" width="20" height="1" fill="black"/>
+                    </svg>
+                    <span class="ms-2">Menu</span>
+                </button>
+
+                <a href="/" class="brand">Whitestone</a>
+
+                <div class="header-socials">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </header>
+
+
+            <article class="standard-content mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h1 class="display-4 mb-4" style="font-family: 'Tenor Sans', serif;">About Us</h1>
+                        
+                        <p class="lead mb-4">The Whitestone Foundations dba Whitestone Publications is a Colorado-registered 501©3 non-profit corporation.</p>
+                        
+                        <div class="content-body">
+                            <p>It publishes two professional e-journals: <strong>The New Polis</strong> and <strong>The Journal for Cultural and Religious Theory</strong>, which are open access journals. It also sponsors webinars and seminars including <em>Critical Conversations</em> and <em>Difficult Discussions</em>.</p>
+                            
+                            <p>Whitestone Publications is engaged collaboratively with the University of Denver and the South Dakota State University.</p>
+
+                            <blockquote class="my-5 p-4 border-start border-4" style="font-style: italic; background: #fdfdfd;">
+                                Whitestone Publications does not retain copyright to its publications. It automatically grants copyright and rights to republication to all authors...
+                            </blockquote>
+
+                            <h5 class="mt-5 mb-4 text-uppercase" style="letter-spacing: 0.1em; font-size: 0.9rem;">Our Partner Publications</h5>
+                            
+                            <div class="row g-4 align-items-center text-center mt-2">
+                                <div class="col-6 col-md-3 logo-item">
+                                    <img src="https://jcrt.org/images/wp-content/uploads/2021/08/JCRT-Logo.jpg" class="img-fluid grayscale" alt="JCRT">
+                                    <p class="small mt-2">JCRT</p>
+                                </div>
+                                <div class="col-6 col-md-3 logo-item">
+                                    <img src="https://thenewpolis.com/wp-content/uploads/2021/08/New-Polis-logo.png" class="img-fluid grayscale" alt="The New Polis">
+                                    <p class="small mt-2">The New Polis</p>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <footer class="py-5 mt-5 border-top text-center">
+                <p class="text-muted small">© Copyright 1999-2026. The Whitestone Foundation, Boulder, Colorado.</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const openBtn = document.getElementById('openMenu');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        // Toggle Sidebar
+        openBtn.addEventListener('click', () => {
+            body.classList.add('sidebar-open');
+        });
+
+        overlay.addEventListener('click', () => {
+            body.classList.remove('sidebar-open');
+        });
+
+        // Dropdown Logic
+        document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
+            trigger.addEventListener('click', function() {
+                const menu = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                // Toggle display
+                if (menu.style.display === "block") {
+                    menu.style.display = "none";
+                    icon.style.transform = "rotate(0deg)";
+                } else {
+                    menu.style.display = "block";
+                    icon.style.transform = "rotate(180deg)";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

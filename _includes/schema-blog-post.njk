@@ -1,0 +1,17 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ title }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ metadata.url }}{{ page.url }}"
+  }{% if image %},
+  "image": "{{ image }}"{% endif %}{% if date %},
+  "datePublished": "{{ date }}"{% endif %}{% if author %},
+  "author": {
+    "@type": "Person",
+    "name": "{{ author }}"
+  }{% endif %}
+}
+</script>

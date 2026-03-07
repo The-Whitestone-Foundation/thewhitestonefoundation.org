@@ -1,0 +1,41 @@
+{
+  "enabled": true,
+  "sites": [
+    {
+      "name": "JCRT",
+      "baseUrl": "http://localhost:8080",
+      "pagefindPath": "http://localhost:8080/pagefind/",
+      "priority": 1,
+      "enabled": true
+    },
+    {
+      "name": "Religious Theory",
+      "baseUrl": "http://localhost:8081",
+      "pagefindPath": "http://localhost:8081/pagefind/",
+      "priority": 2,
+      "enabled": true
+    },
+    {
+      "name": "The New Polis",
+      "baseUrl": "http://localhost:8082",
+      "pagefindPath": "http://localhost:8082/pagefind/",
+      "priority": 3,
+      "enabled": true
+    },
+    {
+      "name": "Esthesis",
+      "baseUrl": "http://localhost:8083",
+      "pagefindPath": "http://localhost:8083/pagefind/",
+      "priority": 4,
+      "enabled": true
+    },
+    {
+      "name": "Whitestone Foundation",
+      "baseUrl": "http://localhost:8084",
+      "pagefindPath": "http://localhost:8084/pagefind/",
+      "local": true,
+      "priority": 5,
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+active:
+  - name: "Victor Taylor"
+    role: "President"
+    photo: "/images/wp-content/uploads/2021/08/VTaylor-1.jpg"
+    description: |
+      **Victor Taylor** is President of The Whitestone Foundation as well as Executive Editor for *The Journal for Cultural and Religious Theory*. 
+      
+      He is Director of Graduate and Non-Traditional Programs at York College of Pennsylvania.
+
+  - name: "Carl Raschke"
+    role: "Secretary-Treasurer"
+    photo: "/images/wp-content/uploads/2021/08/Carl-Raschke.jpg"
+    description: |
+      **Carl Raschke** is Secretary-Treasurer of The Whitestone Foundation as well as Senior Editor for *The Journal for Cultural and Religious Theory*. 
+      
+      He is Professor of Philosophy of Religion and Director of the Master of Arts Program in Religious Studies at the University of Denver.
+
+  - name: "Joshua Ramos"
+    role: "Special Projects Editor"
+    photo: "/images/wp-content/uploads/2021/08/J-Ramos.png"
+    description: |
+      **Joshua Ramos** is Special Projects Editor for Whitestone Publications.
+
+  - name: "Kev Grane"
+    role: "Assistant Editor"
+    photo: "/images/wp-content/uploads/2021/08/Kev-Grane.jpg"
+    description: |
+      **Kev Grane** is Assistant Editor for Whitestone Publications. He is also a PhD student at the University of Denver-Iliff School of Theology Joint Doctoral Program.
+
+alumni:
+  - name: "Dianna Able"
+    photo: "/images/wp-content/uploads/2021/08/IMG_1673.jpeg"
+    description: |
+      **Dianna Able** was Assistant Editor for *The Journal for Cultural and Religious Theory* from 2020-2022. She is now an editor with Shambhala Publishing.
+
+  - name: "Alyssa Putzer"
+    photo: "/images/wp-content/uploads/2021/08/A-Putzer.jpg"
+    description: |
+      **Alyssa Putzer** was Marketing Editor from 2020-22. She is currently a doctoral student at the University of Wisconsin.
+
+  - name: "Olesia Stockhold"
+    photo: "/images/wp-content/uploads/2022/05/Olesia.png"
+    description: |
+      **Olesia Stockhold** was part-time Assistant to the Publisher for Whitestone Publications from 2019-22. She is currently Recruitment and Enrollment Manager at the University of Colorado, Denver.

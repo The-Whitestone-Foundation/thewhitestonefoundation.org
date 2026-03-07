@@ -1,0 +1,158 @@
+backend:
+  name: github
+  repo: adamdjbrett/jcrt.org
+  branch: main
+  base_url: xxxx # yourworker cloudflare
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - file: "_data/metadata.yaml"
+        label: "Metadata & Sidebar"
+        name: "metadata"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "URL", name: "url", widget: "string" }
+          - { label: "Contact Email", name: "contact", widget: "string" }
+          - { label: "Main Image", name: "image", widget: "image" }
+          - { label: "Language", name: "language", widget: "string" }
+          - { label: "Locale", name: "locale", widget: "string" }
+          - { label: "Favicon", name: "favicon", widget: "image" }
+          - { label: "Formspree ID", name: "formspree_id", widget: "string" }
+          - { label: "Social Meta", name: "metasocial", widget: "object", fields: [
+              { label: "Facebook", name: "facebook", widget: "string" },
+              { label: "Twitter User", name: "twitteruser", widget: "string" },
+              { label: "Twitter URL", name: "twitter", widget: "string" }
+            ]}
+          - { label: "Sidebar Config", name: "sidebar", widget: "object", fields: [
+              { label: "Sidebar Title", name: "title", widget: "string" },
+              { label: "Sidebar Logo", name: "logo", widget: "image" },
+              { label: "Navigation List", name: "list", widget: "list", fields: [
+                { label: "Label", name: "label", widget: "string" },
+                { label: "URL", name: "url", widget: "string" },
+                { label: "Is Dropdown?", name: "is_dropdown", widget: "boolean" },
+                { label: "Dropdown Info", name: "info", widget: "list", required: false, fields: [
+                  { label: "Sub Label", name: "label", widget: "string" },
+                  { label: "Sub URL", name: "url", widget: "string" }
+                ]}
+              ]}
+            ]}
+          - { label: "Social Links", name: "social", widget: "list", fields: [
+              { label: "Label", name: "label", widget: "string" },
+              { label: "URL", name: "url", widget: "string" },
+              { label: "Icon Class", name: "icon", widget: "string" }
+            ]}
+          - { label: "Widgets", name: "widget", widget: "object", fields: [
+              { label: "ToC Text", name: "tableofcontent", widget: "string" },
+              { label: "Blog Widget", name: "blog", widget: "object", fields: [
+                { label: "Show Blog?", name: "show", widget: "boolean" },
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Description", name: "description", widget: "text" },
+                { label: "Button Config", name: "button", widget: "object", fields: [
+                  { label: "Button Text", name: "text", widget: "string" },
+                  { label: "Button URL", name: "url", widget: "string" }
+                ]}
+              ]}
+            ]}
+          - { label: "Footer", name: "footer", widget: "object", fields: [
+              { label: "Start Year", name: "startYear", widget: "number" },
+              { label: "Footer Text", name: "text", widget: "string" }
+            ]}
+
+  - name: "panelists_data"
+    label: "Panelists Data"
+    files:
+      - file: "_data/panelists.yaml"
+        label: "Panelists List"
+        name: "panelists"
+        fields:
+          - { label: "List", name: "list", widget: "list", fields: [
+              { label: "Name", name: "name", widget: "string" },
+              { label: "Photo", name: "photo", widget: "image" },
+              { label: "Description", name: "text" }
+            ]}
+
+  - name: "team_data"
+    label: "Team Data"
+    files:
+      - file: "_data/team.yaml"
+        label: "Active & Alumni"
+        name: "team"
+        fields:
+          - { label: "Active Team", name: "active", widget: "list", fields: [
+              { label: "Name", name: "name", widget: "string" },
+              { label: "Role", name: "role", widget: "string" },
+              { label: "Photo", name: "photo", widget: "image" },
+              { label: "Description", name: "text" }
+            ]}
+          - { label: "Alumni", name: "alumni", widget: "list", fields: [
+              { label: "Name", name: "name", widget: "string" },
+              { label: "Photo", name: "photo", widget: "image" },
+              { label: "Description", name: "text" }
+            ]}
+
+  - name: "videos_data"
+    label: "Videos Data"
+    files:
+      - file: "_data/videos.yaml"
+        label: "Video List"
+        name: "videos"
+        fields:
+          - { label: "List", name: "list", widget: "list", fields: [
+              { label: "Title", name: "title", widget: "string" },
+              { label: "YouTube ID/URL", name: "url", widget: "string" }
+            ]}
+
+  - name: "pages"
+    label: "Static Pages"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Layout", name: "layout", widget: "string", hint: "Contoh: contact.njk atau page.njk" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Permalink", name: "permalink", widget: "string" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Categories", name: "categories", widget: "list", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "posts"
+    label: "Blog Posts"
+    folder: "content/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Author Key", name: "author", widget: "string", hint: "Example: helena" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Categories", name: "categories", widget: "list" }
+      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "authors"
+    label: "Authors Profile"
+    folder: "content/authors"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "author-profile.njk" }
+      - { label: "ID Key", name: "key", widget: "string", hint: "ID unik (lowercase), misal: helena" }
+      - { label: "Full Name", name: "name", widget: "string" }
+      - { label: "Role/Title", name: "role", widget: "string" }
+      - { label: "Profile Photo", name: "image", widget: "image" }
+      - { label: "ORCID ID", name: "orcid", widget: "string", required: false }
+      - { label: "Social Media", name: "social", widget: "list", fields: [
+          { label: "Platform Name", name: "title", widget: "string" },
+          { label: "Icon Class", name: "icon", widget: "string", hint: "Contoh: fab fa-twitter" },
+          { label: "URL", name: "url", widget: "string" }
+        ]}
+      - { label: "Biography", name: "body", widget: "markdown" }

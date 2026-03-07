@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | The Whitestone Foundation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Form Styling khusus agar sesuai dengan style.css lo */
+        .contact-section { padding: 60px 0; }
+        
+        .contact-info-box { border-bottom: 1px solid #eee; margin-bottom: 30px; padding-bottom: 20px; }
+        .contact-info-box h5 { 
+            font-family: 'Tenor Sans', serif; 
+            text-transform: uppercase; 
+            font-size: 0.9rem; 
+            letter-spacing: 0.1em; 
+            color: var(--accent);
+        }
+        .contact-info-box a { color: var(--text-main); text-decoration: none; transition: 0.3s; }
+        .contact-info-box a:hover { color: var(--accent); }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label { 
+            display: block; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+        }
+        .form-control-custom {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            background: transparent;
+            border-radius: 0;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+        }
+        .form-control-custom:focus {
+            outline: none;
+            border-bottom: 1px solid var(--text-main);
+        }
+        .btn-send {
+            background: var(--text-main);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            transition: 0.4s;
+        }
+        .btn-send:hover {
+            background: var(--accent);
+            letter-spacing: 0.3em;
+        }
+
+        /* Sidebar Dropdown (Sesuai request lo sebelumnya) */
+        .dropdown-menu-list { display: none; list-style: none; padding-left: 20px; margin-top: 10px; border-left: 1px solid #eee; }
+        .dropdown-trigger { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar-overlay"></div>
+
+    <aside id="sidebar">
+        <nav>
+            <a href="/" class="nav-link-custom">Home</a>
+            <div class="nav-dropdown-wrapper mb-3">
+                <div class="nav-link-custom dropdown-trigger">Events <i class="fas fa-chevron-down small"></i></div>
+                <ul class="dropdown-menu-list">
+                    <li><a href="/higher-ed">Higher Ed</a></li>
+                    <li><a href="/videos">Videos</a></li>
+                </ul>
+            </div>
+            <a href="/contact" class="nav-link-custom active">Contact</a>
+        </nav>
+    </aside>
+
+    <div id="page-wrapper">
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center">
+                <button class="btn-menu" id="openMenu">
+                    <svg width="30" height="10" viewBox="0 0 30 10" fill="none"><rect width="30" height="1" fill="black"/><rect y="9" width="20" height="1" fill="black"/></svg>
+                    <span class="ms-2">Menu</span>
+                </button>
+                <a href="/" class="brand">Whitestone</a>
+                <div class="header-socials"><a href="#"><i class="fab fa-x-twitter"></i></a></div>
+            </header>
+
+            <main class="contact-section">
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <h1 class="display-5 mb-5" style="font-family: 'Tenor Sans', serif;">Contact</h1>
+                        
+                        <div class="contact-info-box">
+                            <h5>General Inquiries</h5>
+                            <a href="mailto:whitestone.pubs@gmail.com">whitestone.pubs@gmail.com</a>
+                        </div>
+
+                        <div class="contact-info-box">
+                            <h5>Journal Editors</h5>
+                            <p class="small text-muted mb-1">Journal for Cultural and Religious Theory</p>
+                            <a href="mailto:editor.jcrt@gmail.com">editor.jcrt@gmail.com</a>
+                            
+                            <p class="small text-muted mt-3 mb-1">The New Polis</p>
+                            <a href="mailto:editor.thenewpolis@gmail.com">editor.thenewpolis@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <form action="https://formspree.io/f/your-form-id" method="POST">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control-custom" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control-custom" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" class="form-control-custom" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="website">Website (Optional)</label>
+                                <input type="url" id="website" name="website" class="form-control-custom">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="4" class="form-control-custom" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio">Short Bio</label>
+                                <textarea id="bio" name="bio" rows="2" class="form-control-custom"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-send">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="py-5 border-top text-center mt-5">
+                <p class="small text-muted">© 2026 The Whitestone Foundation. Boulder, Colorado.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        const body = document.body;
+        document.getElementById('openMenu').addEventListener('click', () => body.classList.add('sidebar-open'));
+        document.getElementById('sidebar-overlay').addEventListener('click', () => body.classList.remove('sidebar-open'));
+
+        // Sidebar Dropdown
+        document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
+            trigger.addEventListener('click', function() {
+                const menu = this.nextElementSibling;
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+                this.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+        });
+    </script>
+</body>
+</html>

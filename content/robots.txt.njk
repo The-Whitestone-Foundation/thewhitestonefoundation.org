@@ -1,0 +1,12 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+
+User-agent: *
+Allow: /
+Disallow: /_site/
+Disallow: /node_modules/
+
+{% set baseUrl = metadata.url | baseUrl %}
+Sitemap: {{ "/sitemap.xml" | absUrl(baseUrl) }}

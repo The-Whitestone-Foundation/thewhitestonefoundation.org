@@ -1,0 +1,79 @@
+title: "The Whitestone Foundation"
+description: "Whitestone Publications and programs in critical theory, public scholarship, and higher education."
+url: "http://localhost:8080"
+contact: "whitestone.pubs@gmail.com"
+image: "/images/whitestone-logo.png"
+language: "en"
+locale: en_US
+favicon: "/images/whitestone-logo.png"
+
+formspree_id: "your-form-id"
+
+metasocial:
+  facebook: https://www.facebook.com/user
+  twitteruser: "@user"
+  twitter: https://x.com/user
+
+
+sidebar:
+  title: "The Whitestone Foundation"
+  logo: "/images/whitestone-logo.png"
+  list:
+    - label: "Home"
+      url: "/"
+      is_dropdown: false
+    - label: "Mission"
+      url: "/mission/"
+      is_dropdown: false
+    - label: "Events"
+      url: "/events/"
+      is_dropdown: true
+      info:
+        - label: "Higher Ed"
+          url: "/higher-ed/"
+        - label: "Videos"
+          url: "/videos/"
+        - label: "Panelists"
+          url: "/panelists/"
+    - label: "Search"
+      url: "/search/"
+      is_dropdown: true
+      info:
+        - label: "Site Search"
+          url: "/search/"
+        - label: "Metadata Search"
+          url: "/metadata/search/"
+    - label: "People"
+      url: "/people/"
+      is_dropdown: false
+    - label: "Contact"
+      url: "/contact/"
+      is_dropdown: false
+
+social: 
+  - label: "Twitter"
+    url: "https://twitter.com/whitestonepubs"
+    icon: "fa-brands fa-twitter"
+  - label: "Facebook"
+    url: "https://www.facebook.com/whitestonepublications/"
+    icon: "fa-brands fa-facebook"
+  - label: "Instagram"
+    url: "https://www.instagram.com/whitestonepublications/"
+    icon: "fa-brands fa-instagram"
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/company/whitestone-publications/"
+    icon: "fa-brands fa-linkedin"
+
+widget: 
+  tableofcontent: "Table of Contents"
+  blog: 
+    show: true
+    title: Recent Posts
+    description: "Latest insights and articles from our foundation."
+    button: 
+      text: View All Posts →
+      url: /news/
+
+footer:
+  startYear: 1999
+  text: "The Whitestone Foundation, a 501c3 corporation located in Boulder, Colorado."

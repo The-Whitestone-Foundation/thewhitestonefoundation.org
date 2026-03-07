@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Whitestone Foundation | Academic Excellence</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-black: #111111;
+            --soft-white: #ffffff;
+            --border-color: #e0e0e0;
+            --sidebar-w: 320px;
+            --font-serif: 'Libre Baskerville', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--soft-white);
+            color: var(--primary-black);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SIDEBAR SYSTEM (NO JUMP) --- */
+        #sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            z-index: 2000;
+            transform: translateX(-100%);
+            transition: var(--transition);
+            padding: 60px 40px;
+        }
+
+        #page-wrapper {
+            transition: var(--transition);
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body.sidebar-open #sidebar { transform: translateX(0); }
+        body.sidebar-open #page-wrapper { transform: translateX(var(--sidebar-w)); }
+
+        #sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1500; display: none; background: rgba(255,255,255,0.8);
+        }
+        body.sidebar-open #sidebar-overlay { display: block; }
+
+        /* --- UI ELEMENTS --- */
+        header {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-text {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: -1px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        .hero-section {
+            padding: 120px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        /* --- GRID LIST --- */
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            display: block;
+            color: #888;
+        }
+
+        .post-entry {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .post-entry:hover { opacity: 0.6; }
+
+        .post-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .post-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .post-meta { font-size: 0.85rem; color: #666; font-style: italic; }
+
+        .btn-minimal {
+            border: 1px solid var(--primary-black);
+            padding: 12px 30px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .btn-minimal:hover {
+            background: var(--primary-black);
+            color: #fff;
+        }
+
+        .menu-btn {
+            background: none; border: none; font-size: 1.5rem; cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 1.5rem; }
+            .hero-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar-overlay"></div>
+
+    <aside id="sidebar">
+        <div class="brand-text mb-5">W.F</div>
+        <nav class="nav flex-column gap-3">
+            <a href="#" class="nav-link text-dark p-0 fw-light fs-4">Foundation</a>
+            <a href="#" class="nav-link text-dark p-0 fw-light fs-4">Publications</a>
+            <a href="#" class="nav-link text-dark p-0 fw-light fs-4">Scholars</a>
+            <a href="#" class="nav-link text-dark p-0 fw-light fs-4">Archives</a>
+        </nav>
+    </aside>
+
+    <div id="page-wrapper">
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center">
+                <button class="menu-btn" id="openMenu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="brand-text">Whitestone</div>
+                <div class="d-none d-md-block">
+                    <button class="btn-minimal">Support</button>
+                </div>
+            </header>
+
+            <section class="hero-section">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h1 class="hero-title">Advancing the study of culture and religious theory for the public interest.</h1>
+                        <p class="lead fw-light" style="max-width: 600px;">The Whitestone Foundation supports high-level academic discourse through its peer-reviewed publications and global scholar network.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-5">
+                <span class="section-label">Latest Publications</span>
+                
+                <a href="#" class="post-entry">
+                    <span class="post-category">Journal • JCRT</span>
+                    <h2 class="post-title">The Digital Insurrection: Aesthetics and Politics</h2>
+                    <div class="post-meta">Published by Carl Raschke • February 2026</div>
+                </a>
+
+                <a href="#" class="post-entry">
+                    <span class="post-category">The New Polis</span>
+                    <h2 class="post-title">Neoliberalism and the Crisis of the Sovereign State</h2>
+                    <div class="post-meta">Published by Roger Green • January 2026</div>
+                </a>
+
+                <a href="#" class="post-entry">
+                    <span class="post-category">Editorial</span>
+                    <h2 class="post-title">Critical Theory in the Age of Artificial Intelligence</h2>
+                    <div class="post-meta">Whitestone Editorial Team • 2026</div>
+                </a>
+
+                <div class="text-center mt-5">
+                    <button class="btn-minimal">View All Archives</button>
+                </div>
+            </section>
+
+            <section class="py-5" style="border-top: 1px solid #eee;">
+                <div class="row g-5">
+                    <div class="col-md-6">
+                        <span class="section-label">The Journal</span>
+                        <p>JCRT is a peer-reviewed academic journal focused on the intersection of cultural and religious theory.</p>
+                        <a href="#" class="text-dark fw-bold text-decoration-none">Visit JCRT Site &rarr;</a>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="section-label">The News</span>
+                        <p>The New Polis provides daily insights into the politics of culture and philosophy.</p>
+                        <a href="#" class="text-dark fw-bold text-decoration-none">Explore The New Polis &rarr;</a>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="py-5 mt-5 border-top text-center">
+                <p class="small text-muted">© 2026 The Whitestone Foundation. All Rights Reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const openBtn = document.getElementById('openMenu');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleMenu() {
+            body.classList.toggle('sidebar-open');
+        }
+
+        openBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+</body>
+</html>

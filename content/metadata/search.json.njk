@@ -1,0 +1,34 @@
+---
+permalink: /metadata/search.json
+---
+{
+  "generated_at": {{ (buildinfo.now | isoDate) | dump | safe }},
+  "items": [
+    {% set baseUrl = metadata.url | baseUrl %}
+    {% set entries = collections.all | sort(attribute='url') %}
+    {% for entry in entries %}
+    {% if entry.url
+      and entry.inputPath
+      and (entry.inputPath.startsWith("./content/pages/") or entry.inputPath.startsWith("./content/posts/"))
+      and entry.inputPath.endsWith(".md")
+      and not entry.data.eleventyExcludeFromCollections
+      and entry.url !== "/metadata/search.json"
+      and not entry.url.startsWith("/feed/")
+      and entry.url !== "/sitemap.xml"
+      and entry.url !== "/robots.txt"
+      and entry.url !== "/humans.txt"
+      and not entry.url.startsWith("/metadata/")
+    %}
+    {
+      "title": {{ (entry.data.title or "") | dump | safe }},
+      "description": {{ (entry.data.description or "") | dump | safe }},
+      "author": {{ (entry.data.author or "") | dump | safe }},
+      "url": {{ (entry.url | absUrl(baseUrl)) | dump | safe }},
+      "low_priority_excerpt": {{ (entry.templateContent | stripHtml | firstWords(200)) | dump | safe }},
+      "categories": {{ (entry.data.categories or []) | dump | safe }},
+      "tags": {{ (entry.data.tags or []) | dump | safe }}
+    }{% if not loop.last %},{% endif %}
+    {% endif %}
+    {% endfor %}
+  ]
+}

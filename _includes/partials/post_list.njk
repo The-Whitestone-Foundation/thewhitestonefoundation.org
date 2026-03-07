@@ -1,0 +1,25 @@
+{% if metadata.widget.blog.show %}
+<section class="container">
+<div class="row g-5 mt-4 border-top pt-4">
+<h2 class="col-md-4">{{ metadata.widget.blog.title }}</h2>
+<p class="col-md-8 lead"
+><a href="{{metadata.widget.blog.button.url}}" 
+class="btn btn-dark rounded-0 btn-sm float-end">
+{{ metadata.widget.blog.button.text }}</a>{{ metadata.widget.blog.description }}
+</p>
+{% for p in collections.posts | reverse | limit(3) %}
+<div class="col-md-6 col-lg-4">
+<a href="{{ p.url }}" class="article-card">
+<div class="img-container">
+<img src="{{ p.data.image or metadata.image }}" alt="{{ p.data.title }}">
+</div>
+<div class="article-meta">
+<span>{{ p.data.category }} • {{ p.date.toDateString() }}</span>
+</div>
+<h3>{{ p.data.title }}</h3>
+<p>{{ p.data.description or p.content | striptags | truncate(150)}}</p>
+</a>
+</div>
+{% endfor %}
+</div>
+</section>{% endif %}

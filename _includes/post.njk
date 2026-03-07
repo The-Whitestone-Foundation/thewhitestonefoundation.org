@@ -1,0 +1,101 @@
+---
+layout: base.njk
+---
+{% include "schema-blog-post.njk" %}
+
+<article class="post-entry">
+  <header class="post-header py-5">
+    <div class="container">
+      <div class="post-meta-top mb-3">
+        <span class="text-uppercase small fw-bold tracking-widest text-secondary">
+          {{ categories[0] or "General" }} • {{ date | readableDate }}
+        </span>
+      </div>
+      <h1 class="serif display-4 mb-4">{{ title }}</h1>
+      <div class="text-secondary lead">
+        By <span class=" fw-bold">{{ author or metadata.author.name }}</span>
+      </div>
+    </div>
+  </header>
+
+  {% if image %}
+  <div class="post-cover-container mb-5">
+    <img src="{{ image }}" class="post-cover img-fluid w-100" alt="{{ title }}" style="max-height: 600px; object-fit: cover;">
+  </div>
+  {% endif %}
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="post-content lh-lg fs-5">
+          {% set tocContent = content | toc %}
+          {% if tocContent %}
+          <div class="p-3 p-md-5 shadow-sm border border-secondary">
+            <p>{{metadata.widget.tableofcontent}}</p>
+            {{content|toc|safe}}</div>{% endif %}
+          {{ content | safe }}
+        </div>
+
+        <div class="post-footer-meta mt-5 pt-5 border-top">
+          {% if categories %}
+          <div class="meta-group mb-4">
+            <span class="meta-label d-block small 
+            text-secondary text-uppercase fw-bold mb-2">Category</span>
+            <div class="meta-values">
+              {% for cat in categories %}
+                <a href="/categories/{{ cat | slugify }}/" 
+                class="btn btn-sm btn-outline-secondary me-2">{{ cat }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if tags | filterTagList %}
+          <div class="meta-group">
+            <span class="meta-label d-block small text-secondary text-uppercase fw-bold mb-2">Tags</span>
+            <div class="meta-values d-flex flex-wrap gap-2">
+              {% for tag in tags | filterTagList %}
+                <a href="/tags/{{ tag | slugify }}/" class="text-decoration-none text-secondary">#{{ tag }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% set prevPost = collections.posts | getPrevPost(page) %}
+  {% set nextPost = collections.posts | getNextPost(page) %}
+  
+  <div class="container mt-5 pb-5">
+    <div class="post-navigation d-flex justify-content-between border-top pt-4">
+      {% if prevPost %}
+      <a href="{{ prevPost.url }}" class="nav-btn text-start text-decoration-none">
+        <small class="d-block text-secondary">Previous Article</small>
+        <span class="fw-bold  fs-5">← {{ prevPost.data.title }}</span>
+      </a>
+      {% else %}
+      <div></div>
+      {% endif %}
+
+      {% if nextPost %}
+      <a href="{{ nextPost.url }}" class="nav-btn text-end text-decoration-none">
+        <small class="d-block text-secondary">Next Article</small>
+        <span class="fw-bold  fs-5">{{ nextPost.data.title }} →</span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+<style>
+  .serif { font-family: 'Tenor Sans', serif; }
+  .post-content p { margin-bottom: 1.5rem;  }
+  .post-content h2, .post-content h3
+   { font-family: 'Tenor Sans', serif; margin-top: 2.5rem; 
+   margin-bottom: 1rem; }
+  .nav-btn { transition: opacity 0.3s; max-width: 45%; }
+  .nav-btn:hover { opacity: 0.7; }
+  .tracking-widest { letter-spacing: 0.1em; }
+</style>

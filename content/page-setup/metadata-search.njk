@@ -1,0 +1,119 @@
+---
+layout: base.njk
+title: Metadata Search
+permalink: /metadata/search/
+---
+
+<section class="search">
+  <h2>Metadata Search</h2>
+  <label for="meta-query">Search all sites</label>
+  <input id="meta-query" type="search" placeholder="Search..." autocomplete="off">
+  <p class="search-help">Results are grouped by site and ordered by priority.</p>
+  <p class="search-help"><a href="/metadata/search.json">/metadata/search.json</a></p>
+</section>
+
+<section id="meta-results" class="search-results"></section>
+
+<script>
+  const config = {{ metasearch | dump | safe }};
+  const localOrigin = window.location.origin;
+  const resultsEl = document.getElementById("meta-results");
+  const inputEl = document.getElementById("meta-query");
+
+  async function loadPagefind(site) {
+    return new Promise((resolve, reject) => {
+      if (!site.pagefindPath) return reject(new Error("Missing pagefindPath"));
+      const script = document.createElement("script");
+      script.src = site.pagefindPath + "pagefind.js";
+      script.async = true;
+      script.onload = () => resolve(window.pagefind);
+      script.onerror = () => reject(new Error("Failed to load pagefind for " + site.name));
+      document.head.appendChild(script);
+    });
+  }
+
+  async function searchSite(site, query) {
+    try {
+      const pf = await loadPagefind(site);
+      if (pf?.options) {
+        pf.options({ baseUrl: site.baseUrl, bundlePath: site.pagefindPath });
+      }
+      const search = await pf.search(query);
+      const results = [];
+      for (const r of search.results) {
+        const data = await r.data();
+        results.push({
+          title: data?.meta?.title || data?.title || data?.url || "Untitled",
+          url: data?.url || r.url,
+          excerpt: data?.excerpt || "",
+          site: site.name
+        });
+      }
+      return results;
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function renderResults(grouped) {
+    resultsEl.innerHTML = "";
+    grouped.forEach(group => {
+      const section = document.createElement("section");
+      const heading = document.createElement("h2");
+      heading.textContent = group.site;
+      section.appendChild(heading);
+
+      const list = document.createElement("ul");
+      group.results.forEach(item => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = item.url;
+        a.textContent = `${item.title} | ${item.site}`;
+        li.appendChild(a);
+        if (item.excerpt) {
+          const p = document.createElement("p");
+          p.textContent = item.excerpt;
+          li.appendChild(p);
+        }
+        list.appendChild(li);
+      });
+      section.appendChild(list);
+      resultsEl.appendChild(section);
+    });
+  }
+
+  async function runSearch(query) {
+    if (!query) {
+      resultsEl.innerHTML = "";
+      return;
+    }
+    const sites = (config.sites || [])
+      .filter(s => s.enabled !== false)
+      .map(s => {
+        if (s.local) {
+          return {
+            ...s,
+            baseUrl: localOrigin,
+            pagefindPath: localOrigin + "/pagefind/"
+          };
+        }
+        return s;
+      })
+      .sort((a, b) => (a.priority || 0) - (b.priority || 0));
+    const grouped = [];
+    for (const site of sites) {
+      const results = await searchSite(site, query);
+      if (results.length) {
+        grouped.push({ site: site.name, results });
+      }
+    }
+    renderResults(grouped);
+  }
+
+  let timer;
+  inputEl.addEventListener("input", (e) => {
+    const q = e.target.value.trim();
+    clearTimeout(timer);
+    timer = setTimeout(() => runSearch(q), 250);
+  });
+</script>
