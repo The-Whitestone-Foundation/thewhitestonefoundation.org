@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ef345c83-b57e-4f35-8cf2-083badc51feb/deploy-status)](https://app.netlify.com/projects/thewhitestonefoundation/deploys)
 # The Whitestone Foundation Website
 
 This repository contains the source code for The Whitestone Foundation website, built with Eleventy (11ty) and managed via Sveltia CMS.
