@@ -1,6 +1,7 @@
 title: "The Whitestone Foundation"
 description: "Whitestone Publications and programs in critical theory, public scholarship, and higher education."
-url: "http://localhost:8080"
+url: "https://thewhitestonefoundation.org"
+#url: "http://localhost:8080"
 contact: "whitestone.pubs@gmail.com"
 image: "/images/whitestone-logo.png"
 language: "en"
