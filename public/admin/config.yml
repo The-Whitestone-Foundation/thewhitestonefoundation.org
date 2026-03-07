@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: adamdjbrett/jcrt.org
+  repo: The-Whitestone-Foundation/thewhitestonefoundation.org
   branch: main
   base_url: xxxx # yourworker cloudflare
 
