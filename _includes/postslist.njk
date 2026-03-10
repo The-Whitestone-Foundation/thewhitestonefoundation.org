@@ -1,6 +1,6 @@
 <div class="row mt-4">
 {% for p in collections.posts | reverse %}
-<div class="col-md-6 col-lg-4">
+<div class="col-md-6 col-lg-4 h-entry">
 <a href="{{ p.url }}" class="article-card">
 <div class="img-container">
 <img src="{{ p.data.image or metadata.image }}" alt="{{ p.data.title }}">

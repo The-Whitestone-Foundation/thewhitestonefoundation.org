@@ -2,7 +2,16 @@
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "{{ metadata.url }}/#website",
   "name": "{{ metadata.title }}",
-  "url": "{{ metadata.url }}"
+  "url": "{{ metadata.url }}",
+  "publisher": {
+    "@id": "https://thewhitestonefoundation.org/#organization"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ metadata.url }}/search/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>

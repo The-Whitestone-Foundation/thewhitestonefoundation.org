@@ -12,6 +12,16 @@ import yaml from "js-yaml";
 import { registerShortcodes } from "./utils/shortcodes.js";
 import { registerFilters } from "./utils/filter.js";
 
+if (typeof globalThis.File === "undefined") {
+  globalThis.File = class File extends Blob {
+    constructor(parts, name, options = {}) {
+      super(parts, options);
+      this.name = String(name || "");
+      this.lastModified = options.lastModified || Date.now();
+    }
+  };
+}
+
 export default function (eleventyConfig) {
   registerShortcodes(eleventyConfig);
   registerFilters(eleventyConfig);

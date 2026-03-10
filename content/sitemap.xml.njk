@@ -31,6 +31,37 @@ eleventyExcludeFromCollections: true
   {%- endif %}
   {%- endfor %}
 
+  {%- for item in collections.all %}
+  {%- if item.data and item.data.pdf %}
+  <url>
+    <loc>{{ item.data.pdf | absUrl(baseUrl) }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  {%- endif %}
+  {%- if item.url and item.url.endsWith(".pdf") %}
+  <url>
+    <loc>{{ item.url | absUrl(baseUrl) }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  {%- endif %}
+  {%- if item.data and item.data.image %}
+  <url>
+    <loc>{{ item.data.image | absUrl(baseUrl) }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  {%- endif %}
+  {%- if item.url and (item.url.endsWith(".png") or item.url.endsWith(".jpg") or item.url.endsWith(".jpeg") or item.url.endsWith(".webp") or item.url.endsWith(".gif") or item.url.endsWith(".svg")) %}
+  <url>
+    <loc>{{ item.url | absUrl(baseUrl) }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  {%- endif %}
+  {%- endfor %}
+
   <url>
     <loc>{{ "/feed/feed.rss" | absUrl(baseUrl) }}</loc>
     <lastmod>{{ buildinfo.now | isoDate }}</lastmod>

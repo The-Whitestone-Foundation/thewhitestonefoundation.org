@@ -3,7 +3,7 @@ layout: base.njk
 ---
 {% include "schema-blog-post.njk" %}
 
-<article class="post-entry">
+<article class="post-entry h-entry">
   <header class="post-header py-5">
     <div class="container">
       <div class="post-meta-top mb-3">
@@ -13,7 +13,7 @@ layout: base.njk
       </div>
       <h1 class="serif display-4 mb-4">{{ title }}</h1>
       <div class="text-secondary lead">
-        By <span class=" fw-bold">{{ author or metadata.author.name }}</span>
+        By <span class="p-author h-card fw-bold"><span class="p-name">{{ author or metadata.author.name }}</span></span>
       </div>
     </div>
   </header>

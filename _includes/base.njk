@@ -6,12 +6,15 @@
 <body>
 <div id="sidebar-overlay"></div>
 {% include "partials/sidebar.njk" %}
-<main id="page-wrapper">
+<main id="page-wrapper" class="h-entry">
 <div class="container">
 {% include "partials/header.njk" %}
-<article class="standard-content mt-5">
+<article class="standard-content mt-5 h-entry">
 {{content|safe}}
 </article>
+<p class="h-card visually-hidden mb-0">
+  <a class="p-name u-url" href="https://thewhitestonefoundation.org/">The Whitestone Foundation</a>
+</p>
 {% include "partials/footer.njk" %}
 </div>
 </main>
