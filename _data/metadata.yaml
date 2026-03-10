@@ -76,5 +76,22 @@ widget:
       url: /news/
 
 footer:
-  startYear: 1999
-  text: "The Whitestone Foundation, a 501c3 corporation located in Boulder, Colorado."
+  year_start: 2018
+  text: "Copyright The Whitestone Foundation dba Whitestone Publications. All Rights Reserved."
+  info: "A WHITESTONE FOUNDATION PUBLICATION"
+  url: "https://thewhitestonefoundation.org/"
+  publications:
+    - title: "JCRT"
+      url: "https://jcrt.org"
+    - title: "The New Polis Journal"
+      url: "https://journal.thenewpolis.com"
+    - title: "The New Polis"
+      url: "https://thenewpolis.com"
+    - title: "Esthesis"
+      url: "https://esthesis.org"
+  manager:
+    name: "Adam DJ Brett"
+    url: "https://adamdjbrett.com"
+  built_with:
+    label: "built with"
+    url: "https://11ty.dev"
