@@ -1,0 +1,14 @@
+---
+permalink: /allsites.json
+eleventyExcludeFromCollections: true
+layout: false
+---
+{%- set canonical = allsitesCanonical or {} -%}
+{%- set chunks = allsitesChunks or {} -%}
+{
+  "generated_at": {{ (canonical.updated_at or (buildinfo.now | isoDate)) | dump | safe }},
+  "raw_total_items": {{ canonical.raw_total_items or ((canonical.items or []) | length) }},
+  "total_items": {{ canonical.total_items or ((canonical.latest_items or canonical.items or []) | length) }},
+  "chunks": {{ chunks | dump | safe }},
+  "items": {% if chunks.enabled %}[]{% else %}{{ (canonical.latest_items or canonical.items or []) | dump | safe }}{% endif %}
+}

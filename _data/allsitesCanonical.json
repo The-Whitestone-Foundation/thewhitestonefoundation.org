@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "updated_at": null,
+  "sources": [
+    "https://jcrt.org/metadata/search.json",
+    "https://journal.thenewpolis.com/metadata/search.json",
+    "https://thenewpolis.com/metadata/search.json",
+    "https://esthesis.org/metadata/search.json",
+    "https://thewhitestonefoundation.org/metadata/search.json"
+  ],
+  "raw_total_items": 0,
+  "total_items": 0,
+  "items": [],
+  "latest_items": []
+}

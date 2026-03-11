@@ -23,11 +23,15 @@ permalink: /search/
       element: "#search",
       showImages: false,
       processResult: (result) => {
-        if (result?.meta?.title) {
-          result.title = result.meta.title;
+        const meta = result?.meta || {};
+        if (meta.source_url) {
+          result.url = meta.source_url;
         }
-        if (result?.meta?.description) {
-          result.excerpt = result.meta.description;
+        if (meta.title) {
+          result.title = meta.site ? `${meta.title} | ${meta.site}` : meta.title;
+        }
+        if (meta.description) {
+          result.excerpt = meta.description;
         }
         return result;
       },

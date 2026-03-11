@@ -1,0 +1,41 @@
+name: Ingest Allsites Metadata
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Ingest metadata endpoints
+        run: node .github/scripts/ingest-allsites.mjs
+
+      - name: Commit to main when new data exists
+        run: |
+          if git diff --quiet; then
+            echo "No metadata changes detected."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A _data/allsitesCanonical.json _data/allsitesChunks.json
+          if [ -d public/metadata/allsites-chunks ]; then
+            git add -A public/metadata/allsites-chunks
+          fi
+          git commit -m "chore: ingest allsites metadata"
+          git push origin HEAD:main
