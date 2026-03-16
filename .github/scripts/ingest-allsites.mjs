@@ -78,14 +78,16 @@ function sanitizeDescription(value) {
   const noImages = noInlineCode.replace(/!\[[^\]]*]\([^)]*\)/g, " ");
   const withLinkText = noImages.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
   const noHtml = withLinkText.replace(/<[^>]+>/g, " ");
-  const noMdSymbols = noHtml.replace(/[*_#~>|-]+/g, " ");
+  const noMdSymbols = noHtml
+    .replace(/[\\[\]{}<>`*_#~|]+/g, " ")
+    .replace(/(^|\s)-{1,3}(?=\s)/g, " ");
   const decoded = noMdSymbols
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&quot;/gi, "\"")
     .replace(/&#39;/gi, "'")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">");
+    .replace(/&lt;/gi, " ")
+    .replace(/&gt;/gi, " ");
   const collapsed = decoded.replace(/\s+/g, " ").trim();
   if (collapsed.length <= MAX_DESCRIPTION_CHARS) return collapsed;
   return collapsed.slice(0, MAX_DESCRIPTION_CHARS).trim();
