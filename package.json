@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "npx @11ty/eleventy --serve",
-    "build": "npx @11ty/eleventy && node scripts/build-pagefind-import.mjs && node scripts/run-pagefind.mjs"
+    "build": "npx @11ty/eleventy && node scripts/build-pagefind-import.mjs && node scripts/run-pagefind.mjs",
+    "refresh:metasearch": "node scripts/update-allsites-canonical.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
