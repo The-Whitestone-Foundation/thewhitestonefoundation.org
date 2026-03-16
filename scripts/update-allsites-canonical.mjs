@@ -5,6 +5,7 @@ import path from "node:path";
 const ROOT = process.cwd();
 const CANONICAL_PATH = path.join(ROOT, "_data", "allsitesCanonical.json");
 const FILES_SEARCH_SITEMAP_URL = "https://files.jcrt.org/metadata/search-sitemap.xml";
+const MAX_DESCRIPTION_CHARS = 1000;
 const LOCAL_FILES_SEARCH_SITEMAP_PATH = path.resolve(
   ROOT,
   "..",
@@ -98,6 +99,26 @@ function localMirrorPathForFilesUrl(url) {
   }
 }
 
+function sanitizeDescription(value) {
+  const text = String(value || "");
+  const noCodeBlocks = text.replace(/```[\s\S]*?```/g, " ");
+  const noInlineCode = noCodeBlocks.replace(/`[^`]*`/g, " ");
+  const noImages = noInlineCode.replace(/!\[[^\]]*]\([^)]*\)/g, " ");
+  const withLinkText = noImages.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+  const noHtml = withLinkText.replace(/<[^>]+>/g, " ");
+  const noMdSymbols = noHtml.replace(/[*_#~>|-]+/g, " ");
+  const decoded = noMdSymbols
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, "\"")
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+  const collapsed = decoded.replace(/\s+/g, " ").trim();
+  if (collapsed.length <= MAX_DESCRIPTION_CHARS) return collapsed;
+  return collapsed.slice(0, MAX_DESCRIPTION_CHARS).trim();
+}
+
 function normalizeItem(item, sourceUrl) {
   const url = String(item?.url || "").trim();
   if (!url) return null;
@@ -111,7 +132,7 @@ function normalizeItem(item, sourceUrl) {
   return {
     title: String(item?.title || "Untitled").trim(),
     url,
-    description: String(item?.description || item?.excerpt || "").trim(),
+    description: sanitizeDescription(item?.description || item?.excerpt || ""),
     author: String(item?.author || "").trim(),
     categories: Array.isArray(item?.categories) ? item.categories : [],
     tags: Array.isArray(item?.tags) ? item.tags : [],

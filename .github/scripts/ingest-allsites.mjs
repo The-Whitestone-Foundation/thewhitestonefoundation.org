@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const MAX_CHUNK_BYTES = 5 * 1024 * 1024;
+const MAX_DESCRIPTION_CHARS = 1000;
 const rootDir = process.cwd();
 const canonicalPath = path.join(rootDir, "_data", "allsitesCanonical.json");
 const chunksMetaPath = path.join(rootDir, "_data", "allsitesChunks.json");
@@ -11,7 +12,7 @@ const chunkDir = path.join(rootDir, "public", "metadata", "allsites-chunks");
 const sources = [
   {
     site: "JCRT",
-    endpoint: "https://jcrt.org/metadata/search.json",
+    endpoint: "https://files.jcrt.org/metadata/search-sitemap.xml",
   },
   {
     site: "The New Polis Journal",
@@ -70,6 +71,52 @@ function normalizeUrl(candidate) {
   }
 }
 
+function sanitizeDescription(value) {
+  const text = toStringSafe(value);
+  const noCodeBlocks = text.replace(/```[\s\S]*?```/g, " ");
+  const noInlineCode = noCodeBlocks.replace(/`[^`]*`/g, " ");
+  const noImages = noInlineCode.replace(/!\[[^\]]*]\([^)]*\)/g, " ");
+  const withLinkText = noImages.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+  const noHtml = withLinkText.replace(/<[^>]+>/g, " ");
+  const noMdSymbols = noHtml.replace(/[*_#~>|-]+/g, " ");
+  const decoded = noMdSymbols
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, "\"")
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+  const collapsed = decoded.replace(/\s+/g, " ").trim();
+  if (collapsed.length <= MAX_DESCRIPTION_CHARS) return collapsed;
+  return collapsed.slice(0, MAX_DESCRIPTION_CHARS).trim();
+}
+
+function parseJsonLenient(raw, sourceUrl) {
+  const text = String(raw || "");
+  try {
+    return JSON.parse(text);
+  } catch {
+    const withoutTrailingCommas = text.replace(/,\s*([}\]])/g, "$1");
+    try {
+      return JSON.parse(withoutTrailingCommas);
+    } catch (error) {
+      throw new Error(`invalid JSON from ${sourceUrl}: ${error.message}`);
+    }
+  }
+}
+
+function parseSitemapJsonLocs(xmlText) {
+  const locs = [];
+  const re = /<loc>([^<]+)<\/loc>/gim;
+  let match = re.exec(String(xmlText || ""));
+  while (match) {
+    const candidate = toStringSafe(match[1]);
+    if (candidate.toLowerCase().endsWith(".json")) locs.push(candidate);
+    match = re.exec(String(xmlText || ""));
+  }
+  return [...new Set(locs)];
+}
+
 function normalizeRecord(item, source, fetchedAt) {
   const date = toStringSafe(item.date || item.published || item.published_at || item.created || item.created_at);
   const url = normalizeUrl(item.url || item.link || item.permalink || "");
@@ -98,7 +145,7 @@ function normalizeRecord(item, source, fetchedAt) {
     url,
     date,
     author,
-    description,
+    description: sanitizeDescription(description),
     categories,
     tags,
     boost: rankBoostFromUrl(url),
@@ -113,19 +160,42 @@ function parseItems(payload) {
 }
 
 async function fetchSource(source) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20000);
-  try {
-    const response = await fetch(source.endpoint, {
+  async function fetchJsonItems(url) {
+    const response = await fetch(url, {
       method: "GET",
       headers: { Accept: "application/json" },
       signal: controller.signal,
     });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    const json = await response.json();
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
+    const json = parseJsonLenient(text, url);
     return parseItems(json);
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
+  try {
+    if (source.endpoint.toLowerCase().endsWith(".xml")) {
+      const response = await fetch(source.endpoint, {
+        method: "GET",
+        headers: { Accept: "application/xml,text/xml,text/plain" },
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const xml = await response.text();
+      const jsonLocs = parseSitemapJsonLocs(xml);
+      const all = [];
+      for (const jsonUrl of jsonLocs) {
+        try {
+          const items = await fetchJsonItems(jsonUrl);
+          all.push(...items);
+        } catch (error) {
+          console.warn(`[ingest] ${source.site} chunk ${jsonUrl}: ${error?.message || "fetch failed"}`);
+        }
+      }
+      return all;
+    }
+    return await fetchJsonItems(source.endpoint);
   } finally {
     clearTimeout(timeout);
   }
