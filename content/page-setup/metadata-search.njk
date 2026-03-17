@@ -5,38 +5,106 @@ permalink: /metadata/search/
 ---
 
 <section class="search">
-  <h2>Metadata Search</h2>
-  <p class="search-help">Searches the unified index built from <a href="/allsites.json">/allsites.json</a>.</p>
-  <div id="metadata-search"></div>
-  <p id="metadata-search-status" class="search-help" hidden>Search index not found yet. Run <code>npm run build</code> to generate Pagefind.</p>
+  <h2>Semantic Metadata Search</h2>
+  <p class="search-help">Searches across Whitestone Foundation publications using semantic similarity.</p>
+  <form id="metasearch-form" class="metasearch-form" role="search">
+    <label class="visually-hidden" for="metasearch-input">Search metadata</label>
+    <input type="search" id="metasearch-input" placeholder="Search across articles, authors, journals, and sites" autocomplete="off">
+    <button type="submit">Search</button>
+  </form>
+  <div id="metasearch-status" class="search-help" aria-live="polite"></div>
+  <div id="metasearch-results" class="metasearch-results" aria-live="polite"></div>
 </section>
 
-<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
-<script src="/pagefind/pagefind-ui.js"></script>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const status = document.getElementById("metadata-search-status");
-    if (typeof PagefindUI === "undefined") {
-      if (status) status.hidden = false;
-      return;
-    }
+<style>
+  .metasearch-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    margin: 1.25rem 0 1rem;
+  }
 
-    new PagefindUI({
-      element: "#metadata-search",
-      showImages: false,
-      processResult: (result) => {
-        const meta = result?.meta || {};
-        if (meta.source_url) {
-          result.url = meta.source_url;
-        }
-        if (meta.title) {
-          result.title = meta.site ? `${meta.title} | ${meta.site}` : meta.title;
-        }
-        if (meta.description) {
-          result.excerpt = meta.description;
-        }
-        return result;
-      },
-    });
-  });
-</script>
+  .metasearch-form input {
+    min-width: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid #c9c9c9;
+    border-radius: 0;
+  }
+
+  .metasearch-form button {
+    padding: 0.85rem 1.15rem;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+  }
+
+  .metasearch-results {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .metasearch-card {
+    border: 1px solid #d9d9d9;
+    padding: 1rem 1.1rem;
+    background: #fff;
+  }
+
+  .metasearch-card h3 {
+    margin: 0 0 0.45rem;
+    font-size: 1.15rem;
+  }
+
+  .metasearch-card h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .metasearch-card h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .metasearch-meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0 0 0.55rem;
+  }
+
+  .metasearch-site {
+    font-weight: 700;
+    color: #111;
+  }
+
+  .metasearch-snippet {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .metasearch-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0;
+    margin: 0.9rem 0 0;
+  }
+
+  .metasearch-tags li {
+    border: 1px solid #d9d9d9;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.85rem;
+    color: #444;
+  }
+
+  .metasearch-empty {
+    margin: 0;
+    color: #666;
+  }
+
+  @media (max-width: 640px) {
+    .metasearch-form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<script src="/js/metasearch-ui.js" defer></script>
