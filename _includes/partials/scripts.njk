@@ -5,14 +5,14 @@ if (currentTheme) {
     document.documentElement.setAttribute('data-theme', currentTheme);
     updateIcon(currentTheme);
 } else {
-    const osPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = osPrefersDark ? 'dark' : 'light';
+    const osPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    const theme = osPrefersLight ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     updateIcon(theme);
 }
 themeToggle.addEventListener('click', () => {
     let theme = document.documentElement.getAttribute('data-theme');
-    let targetTheme = theme === 'dark' ? 'light' : 'dark';
+    let targetTheme = theme === 'light' ? 'dark' : 'light';
     
     document.documentElement.setAttribute('data-theme', targetTheme);
     localStorage.setItem('theme', targetTheme);
@@ -20,7 +20,7 @@ themeToggle.addEventListener('click', () => {
 });
 function updateIcon(theme) {
     const icon = themeToggle.querySelector('i');
-    if (theme === 'dark') {
+    if (theme === 'light') {
         icon.classList.replace('fa-moon', 'fa-sun');
     } else {
         icon.classList.replace('fa-sun', 'fa-moon');

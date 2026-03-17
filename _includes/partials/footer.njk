@@ -2,12 +2,12 @@
 <p class="small">
 © {{ metadata.footer.year_start }}-{{ buildinfo.now | dateFilter("yyyy") }} {{ metadata.footer.text }}
 </p>
-<p class="small fw-bold border-top border-secondary pt-3 d-inline-block text-uppercase" style="letter-spacing: 2px; color: #666;">
-<a href="{{ metadata.footer.url }}" class="text-dark">{{ metadata.footer.info }}</a>
+<p class="small fw-bold border-top pt-3 d-inline-block text-uppercase" style="letter-spacing: 2px; color: var(--text-muted);">
+<a href="{{ metadata.footer.url }}" style="color: var(--accent);">{{ metadata.footer.info }}</a>
 <br/>
 <span style="font-size: 0.8rem;">
 {% for publication in metadata.footer.publications %}
-<a class="text-dark" href="{{ publication.url }}" target="_blank" rel="noopener noreferrer">{{ publication.title }}</a>{% if not loop.last %} | {% endif %}
+<a style="color: var(--text-muted);" href="{{ publication.url }}" target="_blank" rel="noopener noreferrer">{{ publication.title }}</a>{% if not loop.last %} | {% endif %}
 {% endfor %}
 </span>
 <br/>
