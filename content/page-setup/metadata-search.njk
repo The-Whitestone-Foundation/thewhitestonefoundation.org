@@ -14,7 +14,10 @@ permalink: /metadata/search/
   </form>
   <div id="metasearch-progress-wrap" class="metasearch-progress-wrap" hidden>
     <progress id="metasearch-progress" max="100" value="0"></progress>
-    <div id="metasearch-progress-label" class="metasearch-progress-label">Preparing search...</div>
+    <div class="metasearch-progress-meta">
+      <div id="metasearch-progress-label" class="metasearch-progress-label">Preparing search...</div>
+      <div id="metasearch-progress-percent" class="metasearch-progress-percent" aria-live="polite">0%</div>
+    </div>
   </div>
   <div id="metasearch-status" class="search-help" aria-live="polite"></div>
   <div id="metasearch-results" class="metasearch-results" role="region" aria-label="Search results" aria-live="polite"></div>

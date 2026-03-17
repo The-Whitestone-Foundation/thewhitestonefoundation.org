@@ -18,6 +18,7 @@
   const progressWrap = document.getElementById("metasearch-progress-wrap");
   const progressBar = document.getElementById("metasearch-progress");
   const progressLabel = document.getElementById("metasearch-progress-label");
+  const progressPercent = document.getElementById("metasearch-progress-percent");
 
   if (!form || !input || !status || !results) {
     return;
@@ -32,6 +33,8 @@
     extractor: null,
     loadingPromise: null,
     vectorsMode: vectorMode,
+    progressValue: 0,
+    progressVisibleAt: 0,
   };
 
   function escapeHtml(value) {
@@ -49,21 +52,49 @@
   }
 
   function showProgress() {
-    if (progressWrap) progressWrap.hidden = false;
+    if (!progressWrap) return;
+    if (progressWrap.hidden) {
+      state.progressVisibleAt = Date.now();
+    }
+    progressWrap.hidden = false;
   }
 
   function hideProgress() {
     if (progressWrap) progressWrap.hidden = true;
   }
 
-  function setProgress(value, label = "") {
+  function resetProgress(label = "Preparing search...") {
+    state.progressValue = 0;
     showProgress();
+    if (progressBar) progressBar.value = 0;
+    if (progressLabel) progressLabel.textContent = label;
+    if (progressPercent) progressPercent.textContent = "0%";
+  }
+
+  function setProgress(value, label = "", force = false) {
+    showProgress();
+    const numeric = Math.max(0, Math.min(100, Number(value) || 0));
+    const nextValue = force ? numeric : Math.max(state.progressValue, numeric);
+    state.progressValue = nextValue;
     if (progressBar) {
-      progressBar.value = Math.max(0, Math.min(100, Number(value) || 0));
+      progressBar.value = nextValue;
     }
     if (progressLabel && label) {
       progressLabel.textContent = label;
     }
+    if (progressPercent) {
+      progressPercent.textContent = `${Math.round(nextValue)}%`;
+    }
+  }
+
+  async function finishProgress(label = "Done") {
+    setProgress(100, label, true);
+    const elapsed = Date.now() - Number(state.progressVisibleAt || Date.now());
+    const minVisible = 900;
+    if (elapsed < minVisible) {
+      await new Promise((resolve) => setTimeout(resolve, minVisible - elapsed));
+    }
+    hideProgress();
   }
 
   function readCacheMeta() {
@@ -190,13 +221,13 @@
   }
 
   async function loadJson(url) {
-    setProgress(50, "Downloading search data...");
+    setProgress(30, "Downloading search data...");
     const response = await fetchWithEightDayCache(url);
     if (!response.ok) {
       throw new Error(`Failed to load ${url}: HTTP ${response.status}`);
     }
     const text = await response.text();
-    setProgress(55, "Parsing search data...");
+    setProgress(38, "Parsing search data...");
     try {
       return JSON.parse(text);
     } catch {
@@ -227,11 +258,11 @@
         }
         state.vectors = chunks;
         state.vectorsMode = payload.mode === "lite" ? "lite" : (url === VECTORS_LITE_URL ? "lite" : "full");
-        setProgress(60, `Loaded ${chunks.length} chunks (${state.vectorsMode})`);
+        setProgress(62, `Loaded ${chunks.length} chunks (${state.vectorsMode})`);
         return state.vectors;
       } catch (error) {
         lastError = error;
-        setProgress(48, `Retrying with alternate vectors...`);
+        setProgress(50, "Retrying with alternate vectors...");
       }
     }
 
@@ -264,7 +295,7 @@
     if (state.loadingPromise) return state.loadingPromise;
 
     setStatus("Loading search model...");
-    setProgress(4, "Loading runtime...");
+    setProgress(5, "Loading runtime...");
     state.loadingPromise = (async () => {
       const { pipeline, env } = await import(`${MODEL_CDN}/dist/transformers.min.js`);
       env.allowLocalModels = false;
@@ -277,11 +308,11 @@
         dtype: "q8",
         progress_callback: (info) => {
           const progress = normalizeProgressValue(info?.progress);
-          const staged = 12 + Math.round(progress * 0.6);
+          const staged = 12 + Math.round(progress * 0.58);
           setProgress(staged, modelProgressLabel(info));
         },
       });
-      setProgress(75, "Model ready");
+      setProgress(72, "Model ready");
       return state.extractor;
     })();
 
@@ -293,10 +324,10 @@
   }
 
   async function embedQuery(query) {
-    setProgress(80, "Encoding query...");
+    setProgress(76, "Encoding query...");
     const extractor = await ensureExtractor();
     const tensor = await extractor(query, { pooling: "mean", normalize: true });
-    setProgress(86, "Query encoded");
+    setProgress(84, "Query encoded");
     return tensorToVector(tensor);
   }
 
@@ -346,7 +377,8 @@
     }
 
     setStatus("Searching...");
-    setProgress(78, "Preparing semantic search...");
+    resetProgress("Preparing semantic search...");
+    setProgress(8, "Initializing...");
     const [queryVector, vectorChunks, searchIndex] = await Promise.all([
       embedQuery(trimmed),
       ensureVectors(),
@@ -383,14 +415,16 @@
     setProgress(100, "Done");
     renderResults(ranked);
     setStatus(`${ranked.length} result${ranked.length === 1 ? "" : "s"} across ${searchIndex.total_items || 0} documents (${state.vectorsMode} vectors)`);
-    setTimeout(() => hideProgress(), 500);
+    await finishProgress("Done");
   }
 
   async function warmup() {
     try {
+      resetProgress("Warming semantic search...");
+      setProgress(4, "Starting warmup...");
       await Promise.all([primeMetadataPageCache(), ensureExtractor(), ensureVectors()]);
-      setProgress(76, "Warm cache ready");
-      setTimeout(() => hideProgress(), 500);
+      setProgress(100, "Warm cache ready");
+      await finishProgress("Warm cache ready");
     } catch (error) {
       hideProgress();
       setStatus(error instanceof Error ? error.message : String(error), true);
@@ -440,7 +474,7 @@
       if (initialQuery) {
         input.value = initialQuery;
         warmed = true;
-        showProgress();
+        resetProgress("Initializing search...");
         setProgress(2, "Initializing search...");
         await runSearch(initialQuery);
       }
