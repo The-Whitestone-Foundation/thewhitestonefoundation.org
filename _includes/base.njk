@@ -4,12 +4,13 @@
 {% include "partials/seo.njk" %}
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <div id="sidebar-overlay"></div>
 {% include "partials/sidebar.njk" %}
 <main id="page-wrapper" class="h-entry">
 <div class="container">
 {% include "partials/header.njk" %}
-<article class="standard-content mt-5 h-entry">
+<article id="main-content" class="standard-content mt-5 h-entry">
 {{content|safe}}
 </article>
 <p class="h-card visually-hidden mb-0">

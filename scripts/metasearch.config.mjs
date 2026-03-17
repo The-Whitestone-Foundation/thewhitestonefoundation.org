@@ -21,6 +21,8 @@ export const CHUNK = {
 
 export const MODEL = "Xenova/all-MiniLM-L6-v2";
 export const DIMENSION = 384;
+export const LITE_DIMENSION = 192;
+export const LITE_MAX_CHUNKS_PER_DOC = 3;
 export const MIN_TEXT_LENGTH = 180;
 export const SNIPPET_LENGTH = 200;
 export const SIMILARITY_THRESHOLD = 0.2;
@@ -32,16 +34,17 @@ export const SEARCH_VERSION = 1;
 export const VECTORS_VERSION = 1;
 
 export const BOOST_MAP = [
-  { pattern: "jcrt.org/archives/", boost: 700 },
-  { pattern: "journal.thenewpolis.com", boost: 600 },
-  { pattern: "jcrt.org/religioustheory", boost: 500 },
-  { pattern: "jcrt.org", boost: 400 },
-  { pattern: "thenewpolis.com", boost: 300 },
-  { pattern: "esthesis.org", boost: 200 },
-  { pattern: "thewhitestonefoundation.org", boost: 100 },
+  { pattern: "jcrt.org/archives/", boost: 1000 },
+  { pattern: "journal.thenewpolis.com", boost: 800 },
+  { pattern: "jcrt.org/religioustheory", boost: 700 },
+  { pattern: "jcrt.org", boost: 600 },
+  { pattern: "thenewpolis.com", boost: 400 },
+  { pattern: "esthesis.org", boost: 300 },
+  { pattern: "thewhitestonefoundation.org", boost: 150 },
 ];
 
 export const BOOST_DEFAULT = 50;
 
 export const OUTPUT_SEARCH = "_site/metadata/search.json";
 export const OUTPUT_VECTORS = "_site/metadata/vectors.json";
+export const OUTPUT_VECTORS_LITE = "_site/metadata/vectors-lite.json";

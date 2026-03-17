@@ -8,10 +8,13 @@ import {
   DIMENSION,
   EMBEDDING_BATCH_SIZE,
   EMBEDDING_PRECISION,
+  LITE_DIMENSION,
+  LITE_MAX_CHUNKS_PER_DOC,
   MIN_TEXT_LENGTH,
   MODEL,
   OUTPUT_SEARCH,
   OUTPUT_VECTORS,
+  OUTPUT_VECTORS_LITE,
   SNIPPET_LENGTH,
   VECTORS_VERSION,
 } from "./metasearch.config.mjs";
@@ -198,9 +201,36 @@ async function embedChunks(chunks) {
   return embedded;
 }
 
+function buildLiteChunks(embeddedChunks) {
+  const byDoc = new Map();
+  for (const chunk of embeddedChunks) {
+    if (!byDoc.has(chunk.doc_id)) {
+      byDoc.set(chunk.doc_id, []);
+    }
+    byDoc.get(chunk.doc_id).push(chunk);
+  }
+
+  const lite = [];
+  for (const docChunks of byDoc.values()) {
+    const selected = [...docChunks]
+      .sort((left, right) => left.chunk_index - right.chunk_index)
+      .slice(0, LITE_MAX_CHUNKS_PER_DOC);
+
+    for (const chunk of selected) {
+      lite.push({
+        ...chunk,
+        embedding: chunk.embedding.slice(0, LITE_DIMENSION),
+      });
+    }
+  }
+
+  return lite;
+}
+
 async function main() {
   const searchPath = path.join(process.cwd(), OUTPUT_SEARCH);
   const vectorsPath = path.join(process.cwd(), OUTPUT_VECTORS);
+  const vectorsLitePath = path.join(process.cwd(), OUTPUT_VECTORS_LITE);
   const searchPayload = JSON.parse(await fs.readFile(searchPath, "utf8"));
   const items = Array.isArray(searchPayload.items) ? searchPayload.items : [];
   if (items.length === 0) {
@@ -209,6 +239,7 @@ async function main() {
 
   const chunks = items.flatMap((item) => chunkDocument(item));
   const embeddedChunks = await embedChunks(chunks);
+  const liteChunks = buildLiteChunks(embeddedChunks);
 
   const payload = {
     version: VECTORS_VERSION,
@@ -220,9 +251,27 @@ async function main() {
     chunks: embeddedChunks,
   };
 
+  const litePayload = {
+    version: VECTORS_VERSION,
+    mode: "lite",
+    updated_at: new Date().toISOString(),
+    model: MODEL,
+    dimension: LITE_DIMENSION,
+    chunk_config: CHUNK,
+    lite_config: {
+      max_chunks_per_doc: LITE_MAX_CHUNKS_PER_DOC,
+      dimension: LITE_DIMENSION,
+    },
+    total_chunks: liteChunks.length,
+    chunks: liteChunks,
+  };
+
   await fs.mkdir(path.dirname(vectorsPath), { recursive: true });
-  await fs.writeFile(vectorsPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-  console.log(`[semantic-vectors] total_chunks=${embeddedChunks.length}`);
+  await Promise.all([
+    fs.writeFile(vectorsPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8"),
+    fs.writeFile(vectorsLitePath, `${JSON.stringify(litePayload, null, 2)}\n`, "utf8"),
+  ]);
+  console.log(`[semantic-vectors] total_chunks=${embeddedChunks.length} lite_chunks=${liteChunks.length}`);
 }
 
 main().catch((error) => {

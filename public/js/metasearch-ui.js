@@ -1,25 +1,37 @@
 (() => {
   const MODEL = "Xenova/all-MiniLM-L6-v2";
   const MODEL_CDN = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+  const CACHE_NAME = "metasearch-cache-v1";
+  const CACHE_META_KEY = "metasearch-cache-meta-v1";
+  const CACHE_TTL_MS = 8 * 24 * 60 * 60 * 1000;
+  const METADATA_PAGES = ["/metadata/", "/metadata/search/"];
   const SEARCH_URL = "/metadata/search.json";
+  const VECTORS_LITE_URL = "/metadata/vectors-lite.json";
   const VECTORS_URL = "/metadata/vectors.json";
-  const SIMILARITY_THRESHOLD = 0.2;
-  const MAX_RESULTS = 10;
+  const SIMILARITY_THRESHOLD = 0.15;
+  const MAX_RESULTS = 15;
 
   const form = document.getElementById("metasearch-form");
   const input = document.getElementById("metasearch-input");
   const status = document.getElementById("metasearch-status");
   const results = document.getElementById("metasearch-results");
+  const progressWrap = document.getElementById("metasearch-progress-wrap");
+  const progressBar = document.getElementById("metasearch-progress");
+  const progressLabel = document.getElementById("metasearch-progress-label");
 
   if (!form || !input || !status || !results) {
     return;
   }
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const vectorMode = searchParams.get("mode") === "full" ? "full" : "lite";
 
   const state = {
     searchIndex: null,
     vectors: null,
     extractor: null,
     loadingPromise: null,
+    vectorsMode: vectorMode,
   };
 
   function escapeHtml(value) {
@@ -34,6 +46,84 @@
   function setStatus(message, isError = false) {
     status.textContent = message;
     status.dataset.state = isError ? "error" : "ready";
+  }
+
+  function showProgress() {
+    if (progressWrap) progressWrap.hidden = false;
+  }
+
+  function hideProgress() {
+    if (progressWrap) progressWrap.hidden = true;
+  }
+
+  function setProgress(value, label = "") {
+    showProgress();
+    if (progressBar) {
+      progressBar.value = Math.max(0, Math.min(100, Number(value) || 0));
+    }
+    if (progressLabel && label) {
+      progressLabel.textContent = label;
+    }
+  }
+
+  function readCacheMeta() {
+    try {
+      const raw = localStorage.getItem(CACHE_META_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function writeCacheMeta(meta) {
+    try {
+      localStorage.setItem(CACHE_META_KEY, JSON.stringify(meta));
+    } catch {
+      // Ignore quota failures.
+    }
+  }
+
+  function isFresh(timestamp) {
+    if (!timestamp) return false;
+    return Date.now() - Number(timestamp) < CACHE_TTL_MS;
+  }
+
+  async function fetchWithEightDayCache(url) {
+    if (!("caches" in window)) {
+      return fetch(url, { headers: { accept: "application/json,text/html,*/*" } });
+    }
+
+    const cache = await caches.open(CACHE_NAME);
+    const cacheMeta = readCacheMeta();
+    const key = String(url);
+    const cached = await cache.match(key);
+
+    if (cached && isFresh(cacheMeta[key])) {
+      return cached.clone();
+    }
+
+    const response = await fetch(key, { headers: { accept: "application/json,text/html,*/*" } });
+    if (response.ok) {
+      await cache.put(key, response.clone());
+      cacheMeta[key] = Date.now();
+      writeCacheMeta(cacheMeta);
+    }
+
+    return response;
+  }
+
+  async function primeMetadataPageCache() {
+    await Promise.all(
+      METADATA_PAGES.map(async (url) => {
+        try {
+          await fetchWithEightDayCache(url);
+        } catch {
+          // Keep search functional even if pre-cache fails.
+        }
+      })
+    );
   }
 
   function normalizeDate(dateString) {
@@ -82,12 +172,36 @@
     return 0;
   }
 
+  function textMatchBonus(query, chunk) {
+    const q = String(query || "").toLowerCase().trim();
+    if (!q) return 0;
+    const words = q.split(/\s+/).filter(Boolean);
+    const title = String(chunk.title || "").toLowerCase();
+    const snippet = String(chunk.snippet || "").toLowerCase();
+    const combined = title + " " + snippet;
+    let bonus = 0;
+    if (title.includes(q)) bonus += 0.12;
+    else if (combined.includes(q)) bonus += 0.05;
+    for (const w of words) {
+      if (title.includes(w)) bonus += 0.04;
+      else if (combined.includes(w)) bonus += 0.01;
+    }
+    return Math.min(bonus, 0.25);
+  }
+
   async function loadJson(url) {
-    const response = await fetch(url, { headers: { accept: "application/json" } });
+    setProgress(50, "Downloading search data...");
+    const response = await fetchWithEightDayCache(url);
     if (!response.ok) {
       throw new Error(`Failed to load ${url}: HTTP ${response.status}`);
     }
-    return response.json();
+    const text = await response.text();
+    setProgress(55, "Parsing search data...");
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error(`Invalid JSON from ${url}`);
+    }
   }
 
   async function ensureSearchIndex() {
@@ -98,9 +212,30 @@
 
   async function ensureVectors() {
     if (state.vectors) return state.vectors;
-    const payload = await loadJson(VECTORS_URL);
-    state.vectors = Array.isArray(payload.chunks) ? payload.chunks : [];
-    return state.vectors;
+    const candidateUrls = state.vectorsMode === "full"
+      ? [VECTORS_URL]
+      : [VECTORS_LITE_URL, VECTORS_URL];
+
+    let lastError = null;
+    for (const url of candidateUrls) {
+      try {
+        setProgress(45, `Loading vectors (${url.includes("lite") ? "lite" : "full"})...`);
+        const payload = await loadJson(url);
+        const chunks = Array.isArray(payload.chunks) ? payload.chunks : [];
+        if (!chunks.length) {
+          throw new Error("Vector index is empty");
+        }
+        state.vectors = chunks;
+        state.vectorsMode = payload.mode === "lite" ? "lite" : (url === VECTORS_LITE_URL ? "lite" : "full");
+        setProgress(60, `Loaded ${chunks.length} chunks (${state.vectorsMode})`);
+        return state.vectors;
+      } catch (error) {
+        lastError = error;
+        setProgress(48, `Retrying with alternate vectors...`);
+      }
+    }
+
+    throw (lastError || new Error("Unable to load semantic vector index"));
   }
 
   function tensorToVector(tensor) {
@@ -111,11 +246,25 @@
     return Array.from(tensor?.data || []);
   }
 
+  function normalizeProgressValue(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return 0;
+    if (numeric <= 1) return Math.round(numeric * 100);
+    return Math.round(numeric);
+  }
+
+  function modelProgressLabel(info) {
+    const file = info?.file ? ` ${String(info.file).split("/").pop()}` : "";
+    const stateText = info?.status ? String(info.status).replaceAll("_", " ") : "downloading";
+    return `${stateText}${file}`.trim();
+  }
+
   async function ensureExtractor() {
     if (state.extractor) return state.extractor;
     if (state.loadingPromise) return state.loadingPromise;
 
     setStatus("Loading search model...");
+    setProgress(4, "Loading runtime...");
     state.loadingPromise = (async () => {
       const { pipeline, env } = await import(`${MODEL_CDN}/dist/transformers.min.js`);
       env.allowLocalModels = false;
@@ -123,9 +272,16 @@
       if (env.backends?.onnx?.wasm) {
         env.backends.onnx.wasm.wasmPaths = `${MODEL_CDN}/dist/`;
       }
+      setProgress(12, "Downloading semantic model...");
       state.extractor = await pipeline("feature-extraction", MODEL, {
         dtype: "q8",
+        progress_callback: (info) => {
+          const progress = normalizeProgressValue(info?.progress);
+          const staged = 12 + Math.round(progress * 0.6);
+          setProgress(staged, modelProgressLabel(info));
+        },
       });
+      setProgress(75, "Model ready");
       return state.extractor;
     })();
 
@@ -137,8 +293,10 @@
   }
 
   async function embedQuery(query) {
+    setProgress(80, "Encoding query...");
     const extractor = await ensureExtractor();
     const tensor = await extractor(query, { pooling: "mean", normalize: true });
+    setProgress(86, "Query encoded");
     return tensorToVector(tensor);
   }
 
@@ -146,7 +304,7 @@
     const meta = [];
     if (result.site) meta.push(`<span class="metasearch-site">${escapeHtml(result.site)}</span>`);
     if (result.author) meta.push(`<span>${escapeHtml(result.author)}</span>`);
-    if (result.date) meta.push(`<span>${escapeHtml(formatDate(result.date))}</span>`);
+    if (result.date) meta.push(`<time datetime="${escapeHtml(result.date)}">${escapeHtml(formatDate(result.date))}</time>`);
 
     const tags = [...(result.categories || []), ...(result.tags || [])]
       .filter(Boolean)
@@ -154,12 +312,16 @@
       .map((tag) => `<li>${escapeHtml(tag)}</li>`)
       .join("");
 
+    const url = result.url || "#";
+    const title = result.title || "Untitled";
+
     return `
       <article class="metasearch-card">
-        <h3><a href="${escapeHtml(result.url)}">${escapeHtml(result.title || "Untitled")}</a></h3>
-        <p class="metasearch-meta">${meta.join(" <span aria-hidden=\"true\">•</span> ")}</p>
-        <p class="metasearch-snippet">${escapeHtml(result.snippet || result.description || "")}</p>
-        ${tags ? `<ul class="metasearch-tags">${tags}</ul>` : ""}
+        <h3><a href="${escapeHtml(url)}" rel="noopener">${escapeHtml(title)}</a></h3>
+        ${meta.length ? `<p class="metasearch-meta">${meta.join(' <span aria-hidden="true">&bull;</span> ')}</p>` : ""}
+        ${result.snippet || result.description ? `<p class="metasearch-snippet">${escapeHtml(result.snippet || result.description)}</p>` : ""}
+        ${url !== "#" ? `<p class="metasearch-url"><a href="${escapeHtml(url)}" rel="noopener">${escapeHtml(url)}</a></p>` : ""}
+        ${tags ? `<ul class="metasearch-tags" aria-label="Tags">${tags}</ul>` : ""}
       </article>
     `;
   }
@@ -178,11 +340,13 @@
     if (!trimmed) {
       results.innerHTML = "";
       const searchIndex = await ensureSearchIndex();
-      setStatus(`Search across ${searchIndex.total_items || 0} documents`);
+      setStatus(`Search across ${searchIndex.total_items || 0} documents (${state.vectorsMode} vectors)`);
+      hideProgress();
       return;
     }
 
     setStatus("Searching...");
+    setProgress(78, "Preparing semantic search...");
     const [queryVector, vectorChunks, searchIndex] = await Promise.all([
       embedQuery(trimmed),
       ensureVectors(),
@@ -190,10 +354,13 @@
     ]);
 
     const bestByUrl = new Map();
-    for (const chunk of vectorChunks) {
+    for (let index = 0; index < vectorChunks.length; index += 1) {
+      const chunk = vectorChunks[index];
       const similarity = cosineSimilarity(queryVector, chunk.embedding || []);
       if (similarity < SIMILARITY_THRESHOLD) continue;
-      const score = similarity + ((Number(chunk.boost) || 0) / 10000) + recencyScore(chunk.date);
+      const boostScore = (Number(chunk.boost) || 0) / 5000;
+      const textBonus = textMatchBonus(trimmed, chunk);
+      const score = similarity + boostScore + recencyScore(chunk.date) + textBonus;
       const existing = bestByUrl.get(chunk.url);
       if (!existing || score > existing.score) {
         bestByUrl.set(chunk.url, {
@@ -202,20 +369,30 @@
           score,
         });
       }
+
+      if (index % 250 === 0 || index === vectorChunks.length - 1) {
+        const progress = 86 + Math.round(((index + 1) / Math.max(vectorChunks.length, 1)) * 12);
+        setProgress(progress, "Scoring candidate chunks...");
+      }
     }
 
     const ranked = [...bestByUrl.values()]
       .sort((left, right) => right.score - left.score)
       .slice(0, MAX_RESULTS);
 
+    setProgress(100, "Done");
     renderResults(ranked);
-    setStatus(`${ranked.length} result${ranked.length === 1 ? "" : "s"} across ${searchIndex.total_items || 0} documents`);
+    setStatus(`${ranked.length} result${ranked.length === 1 ? "" : "s"} across ${searchIndex.total_items || 0} documents (${state.vectorsMode} vectors)`);
+    setTimeout(() => hideProgress(), 500);
   }
 
   async function warmup() {
     try {
-      await Promise.all([ensureExtractor(), ensureVectors()]);
+      await Promise.all([primeMetadataPageCache(), ensureExtractor(), ensureVectors()]);
+      setProgress(76, "Warm cache ready");
+      setTimeout(() => hideProgress(), 500);
     } catch (error) {
+      hideProgress();
       setStatus(error instanceof Error ? error.message : String(error), true);
     }
   }
@@ -234,6 +411,7 @@
     try {
       await runSearch(query);
     } catch (error) {
+      hideProgress();
       results.innerHTML = "";
       setStatus(error instanceof Error ? error.message : String(error), true);
     }
@@ -254,15 +432,20 @@
 
   (async () => {
     try {
+      await primeMetadataPageCache();
       const searchIndex = await ensureSearchIndex();
-      setStatus(`Search across ${searchIndex.total_items || 0} documents`);
+      setStatus(`Search across ${searchIndex.total_items || 0} documents (${state.vectorsMode} vectors)`);
       const params = new URLSearchParams(window.location.search);
       const initialQuery = params.get("q") || "";
       if (initialQuery) {
         input.value = initialQuery;
+        warmed = true;
+        showProgress();
+        setProgress(2, "Initializing search...");
         await runSearch(initialQuery);
       }
     } catch (error) {
+      hideProgress();
       setStatus(error instanceof Error ? error.message : String(error), true);
     }
   })();
