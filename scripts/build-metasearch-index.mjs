@@ -117,13 +117,24 @@ async function main() {
   );
 
   const successful = responses.filter(({ result }) => result.ok && result.data);
+  const failed = responses.filter(({ result }) => !result.ok || !result.data);
   if (successful.length === 0) {
     throw new Error("No metasearch sources were available");
   }
 
+  if (failed.length > 0) {
+    for (const row of failed) {
+      console.error(`[metasearch-index] source failed: ${row.source} :: ${row.result.error || "unknown error"}`);
+    }
+    throw new Error(`Metasearch source fetch incomplete (${successful.length}/${SOURCES.length}). Refusing to publish partial index.`);
+  }
+
   const rawItems = [];
+  const source_item_counts = {};
   for (const { source, result } of successful) {
-    for (const item of ensureArrayPayload(result.data)) {
+    const sourceItems = ensureArrayPayload(result.data);
+    source_item_counts[source] = sourceItems.length;
+    for (const item of sourceItems) {
       rawItems.push({ item, source });
     }
   }
@@ -141,6 +152,7 @@ async function main() {
     version: SEARCH_VERSION,
     updated_at: new Date().toISOString(),
     sources: SOURCES,
+    source_item_counts,
     raw_total_items: rawItems.length,
     total_items: items.length,
     items,

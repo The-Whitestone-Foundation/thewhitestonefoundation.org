@@ -30,6 +30,7 @@
   const state = {
     searchIndex: null,
     vectors: null,
+    vectorDimension: 0,
     extractor: null,
     loadingPromise: null,
     vectorsMode: vectorMode,
@@ -121,15 +122,42 @@
     return Date.now() - Number(timestamp) < CACHE_TTL_MS;
   }
 
-  async function fetchWithEightDayCache(url) {
+  async function fetchWithEightDayCache(url, { preferFresh = false } = {}) {
     if (!("caches" in window)) {
-      return fetch(url, { headers: { accept: "application/json,text/html,*/*" } });
+      return fetch(url, {
+        cache: preferFresh ? "no-store" : "default",
+        headers: { accept: "application/json,text/html,*/*" },
+      });
     }
 
     const cache = await caches.open(CACHE_NAME);
     const cacheMeta = readCacheMeta();
     const key = String(url);
     const cached = await cache.match(key);
+
+    if (preferFresh) {
+      try {
+        const response = await fetch(key, {
+          cache: "no-store",
+          headers: { accept: "application/json,text/html,*/*" },
+        });
+        if (response.ok) {
+          await cache.put(key, response.clone());
+          cacheMeta[key] = Date.now();
+          writeCacheMeta(cacheMeta);
+          return response;
+        }
+        if (cached) {
+          return cached.clone();
+        }
+        return response;
+      } catch (error) {
+        if (cached) {
+          return cached.clone();
+        }
+        throw error;
+      }
+    }
 
     if (cached && isFresh(cacheMeta[key])) {
       return cached.clone();
@@ -222,7 +250,7 @@
 
   async function loadJson(url) {
     setProgress(30, "Downloading search data...");
-    const response = await fetchWithEightDayCache(url);
+    const response = await fetchWithEightDayCache(url, { preferFresh: true });
     if (!response.ok) {
       throw new Error(`Failed to load ${url}: HTTP ${response.status}`);
     }
@@ -257,6 +285,7 @@
           throw new Error("Vector index is empty");
         }
         state.vectors = chunks;
+        state.vectorDimension = Number(payload.dimension) || Number(chunks[0]?.embedding?.length) || 0;
         state.vectorsMode = payload.mode === "lite" ? "lite" : (url === VECTORS_LITE_URL ? "lite" : "full");
         setProgress(62, `Loaded ${chunks.length} chunks (${state.vectorsMode})`);
         return state.vectors;
@@ -331,6 +360,18 @@
     return tensorToVector(tensor);
   }
 
+  function alignQueryVector(queryVector) {
+    const targetDimension = Number(state.vectorDimension) || Number(queryVector?.length) || 0;
+    const values = Array.isArray(queryVector) ? queryVector : [];
+    if (!targetDimension || values.length === targetDimension) {
+      return values;
+    }
+    if (values.length > targetDimension) {
+      return values.slice(0, targetDimension);
+    }
+    return values.concat(new Array(targetDimension - values.length).fill(0));
+  }
+
   function buildResultMarkup(result) {
     const meta = [];
     if (result.site) meta.push(`<span class="metasearch-site">${escapeHtml(result.site)}</span>`);
@@ -379,11 +420,12 @@
     setStatus("Searching...");
     resetProgress("Preparing semantic search...");
     setProgress(8, "Initializing...");
-    const [queryVector, vectorChunks, searchIndex] = await Promise.all([
+    const [rawQueryVector, vectorChunks, searchIndex] = await Promise.all([
       embedQuery(trimmed),
       ensureVectors(),
       ensureSearchIndex(),
     ]);
+    const queryVector = alignQueryVector(rawQueryVector);
 
     const bestByUrl = new Map();
     for (let index = 0; index < vectorChunks.length; index += 1) {
