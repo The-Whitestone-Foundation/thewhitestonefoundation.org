@@ -53,17 +53,20 @@ sidebar:
 
 social: 
   - label: "Twitter"
-    url: "https://twitter.com/whitestonepubs"
+    url: "https://twitter.com/jourculreltheor"
     icon: "fa-brands fa-twitter"
   - label: "Facebook"
-    url: "https://www.facebook.com/whitestonepublications/"
+    url: "hhttps://www.facebook.com/religioustheory"
     icon: "fa-brands fa-facebook"
   - label: "Instagram"
-    url: "https://www.instagram.com/whitestonepublications/"
+    url: "https://www.instagram.com/JCRT_DU1"
     icon: "fa-brands fa-instagram"
-  - label: "LinkedIn"
-    url: "https://www.linkedin.com/company/whitestone-publications/"
-    icon: "fa-brands fa-linkedin"
+  - label: "Bluesky"
+    url: "https://bsky.app/profile/jcrt.org"
+    icon: "fa-brands fa-bluesky"
+  - label: "Mastodon"
+    url: "https://mastodon.social/@jcrt"
+    icon: "fa-brands fa-mastodon"  
 
 widget: 
   tableofcontent: "Table of Contents"
