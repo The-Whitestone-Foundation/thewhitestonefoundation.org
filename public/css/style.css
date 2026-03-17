@@ -247,7 +247,7 @@
     --focus-ring: #006D80;
 }
 
-/* --- Skip link (AAA keyboard nav) --- */
+/* --- Skip link (hidden until tab key pressed) --- */
 .skip-link {
     position: absolute;
     left: -999em;
@@ -260,7 +260,7 @@
     text-decoration: none;
     font-size: 0.9rem;
 }
-.skip-link:focus {
+.skip-link:focus-visible {
     left: 0;
 }
 
