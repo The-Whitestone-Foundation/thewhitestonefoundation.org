@@ -1,31 +1,37 @@
 #!/usr/bin/env node
+/**
+ * Build the metasearch index from pre-ingested _data/allsitesCanonical.json.
+ *
+ * The GitHub Action (ingest-allsites.yml) fetches all source endpoints on a
+ * weekly schedule and commits the canonical JSON to the repo. This script
+ * reads that file at build time so the Eleventy/Netlify build never needs to
+ * make live HTTP requests to external sources (which are blocked by WAFs).
+ */
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  FETCH_TIMEOUT_MS,
   OUTPUT_SEARCH,
   SEARCH_VERSION,
   SOURCES,
 } from "./metasearch.config.mjs";
 import {
   canonicalizeUrl,
-  ensureArrayPayload,
   normalizeWhitespace,
   parseDateSafe,
   rankBoostFromUrl,
-  safeFetchJson,
   siteFromUrl,
   stableSha1,
   stripHtml,
-  toArray,
   uniqueStrings,
 } from "./lib/metasearch-utils.mjs";
+
+const CANONICAL_PATH = path.join(process.cwd(), "_data", "allsitesCanonical.json");
 
 function buildSearchText(parts) {
   return normalizeWhitespace(parts.filter(Boolean).join("\n"));
 }
 
-function normalizeItem(item, source) {
+function normalizeItem(item) {
   const url = canonicalizeUrl(item?.url || item?.source_url || item?.canonical_url);
   if (!url) return null;
 
@@ -51,7 +57,7 @@ function normalizeItem(item, source) {
   return {
     id: stableSha1(url),
     site,
-    source,
+    source: url,
     url,
     title,
     author,
@@ -109,39 +115,19 @@ async function writeOutput(payload) {
 }
 
 async function main() {
-  const responses = await Promise.all(
-    SOURCES.map(async (source) => ({
-      source,
-      result: await safeFetchJson(source, FETCH_TIMEOUT_MS),
-    }))
-  );
+  const raw = await fs.readFile(CANONICAL_PATH, "utf8");
+  const canonical = JSON.parse(raw);
+  const rawItems = canonical.items;
 
-  const successful = responses.filter(({ result }) => result.ok && result.data);
-  const failed = responses.filter(({ result }) => !result.ok || !result.data);
-  if (successful.length === 0) {
-    throw new Error("No metasearch sources were available");
+  if (!Array.isArray(rawItems) || rawItems.length === 0) {
+    throw new Error(`No items found in ${CANONICAL_PATH}`);
   }
 
-  if (failed.length > 0) {
-    for (const row of failed) {
-      console.error(`[metasearch-index] source failed: ${row.source} :: ${row.result.error || "unknown error"}`);
-    }
-    throw new Error(`Metasearch source fetch incomplete (${successful.length}/${SOURCES.length}). Refusing to publish partial index.`);
-  }
-
-  const rawItems = [];
-  const source_item_counts = {};
-  for (const { source, result } of successful) {
-    const sourceItems = ensureArrayPayload(result.data);
-    source_item_counts[source] = sourceItems.length;
-    for (const item of sourceItems) {
-      rawItems.push({ item, source });
-    }
-  }
+  console.log(`[metasearch-index] read ${rawItems.length} items from allsitesCanonical.json (ingested ${canonical.updated_at || "unknown"})`);
 
   const deduped = new Map();
-  for (const row of rawItems) {
-    const normalized = normalizeItem(row.item, row.source);
+  for (const item of rawItems) {
+    const normalized = normalizeItem(item);
     if (!normalized) continue;
     const existing = deduped.get(normalized.url);
     deduped.set(normalized.url, existing ? pickBetterItem(existing, normalized) : normalized);
@@ -152,7 +138,9 @@ async function main() {
     version: SEARCH_VERSION,
     updated_at: new Date().toISOString(),
     sources: SOURCES,
-    source_item_counts,
+    source_item_counts: canonical.sources
+      ? Object.fromEntries(canonical.sources.map((s) => [s, "pre-ingested"]))
+      : {},
     raw_total_items: rawItems.length,
     total_items: items.length,
     items,
@@ -160,7 +148,7 @@ async function main() {
   };
 
   await writeOutput(payload);
-  console.log(`[metasearch-index] sources=${successful.length}/${SOURCES.length} raw=${rawItems.length} total=${items.length}`);
+  console.log(`[metasearch-index] raw=${rawItems.length} deduped=${items.length}`);
 }
 
 main().catch((error) => {
