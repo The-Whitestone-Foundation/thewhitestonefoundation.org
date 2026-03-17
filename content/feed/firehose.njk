@@ -1,0 +1,36 @@
+---
+permalink: /feed/firehose.xml
+eleventyExcludeFromCollections: true
+layout: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="/feed/pretty-atom-feed.xsl" type="text/xsl"?>
+{% set baseUrl = metadata.url | baseUrl %}
+{% set items = collections.all | reverse %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ metadata.title }} Firehose</title>
+  <subtitle>{{ metadata.description }}</subtitle>
+  <link href="{{ '/feed/firehose.xml' | absUrl(baseUrl) }}" rel="self"/>
+  <link href="{{ '/' | absUrl(baseUrl) }}"/>
+  <updated>{{ ((items[0] and items[0].date) or page.date) | isoDate }}</updated>
+  <id>{{ '/' | absUrl(baseUrl) }}</id>
+  <author>
+    <name>{{ metadata.title }}</name>
+  </author>
+
+  {%- for post in items %}
+    {%- if post.url and post.url != permalink and post.data and post.data.title %}
+      {%- if loop.index0 < 100 %}
+      {% set absoluteUrl %}{{ post.url | absUrl(baseUrl) }}{% endset %}
+      {% set entryHtml = (post.templateContent or post.content or post.data.description or "") | trim %}
+      <entry>
+        <title>{{ post.data.title }}</title>
+        <link href="{{ absoluteUrl }}"/>
+        <updated>{{ post.date | isoDate }}</updated>
+        <id>{{ absoluteUrl }}</id>
+        <content type="html"><![CDATA[{{ entryHtml | replace("]]>", "]]]]><![CDATA[>") | safe }}]]></content>
+      </entry>
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+</feed>

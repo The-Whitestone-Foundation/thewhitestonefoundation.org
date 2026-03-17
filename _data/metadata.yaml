@@ -9,11 +9,14 @@ locale: en_US
 favicon: "/images/whitestone-logo.png"
 
 formspree_id: "your-form-id"
+author:
+  name: "The Whitestone Foundation"
 
 metasocial:
-  facebook: https://www.facebook.com/user
-  twitteruser: "@user"
-  twitter: https://x.com/user
+  twitter: "https://x.com/jourculreltheor"
+  twitteruser: "@jourculreltheor"
+  facebook: "https://www.facebook.com/religioustheory"
+  mastodon: "@jcrt@mastodon.social"
 
 
 sidebar:
