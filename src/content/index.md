@@ -34,7 +34,7 @@ mission:
   button: 
      - text: Knowledge Futures
        url: "/docs/Knowledge-Futures-for-the-21st-Century.pdf"
-       download: true
+       download: false
 
   
   stats:

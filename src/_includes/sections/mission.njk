@@ -12,11 +12,11 @@
         <div class="rule" style="margin-bottom:24px;"></div>
 		
         {% for m in mission.button %}
-  <a href="{{ m.url }}" 
-     {% if m.download %}download{% endif %}
+  <a href="{{ m.url }}"
+     {% if m.download %}download{% else %}target="_blank" rel="noopener"{% endif %}
      class="button button--small button--pill">
     {{ m.text }}
-    <span aria-hidden="true">⬇</span>
+    <span aria-hidden="true">{% if m.download %}⬇{% else %}↗{% endif %}</span>
   </a>
 {% endfor %}
       </div>
