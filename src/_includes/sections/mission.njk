@@ -13,9 +13,10 @@
 		
         {% for m in mission.button %}
   <a href="{{ m.url }}" 
+     {% if m.download %}download{% endif %}
      class="button button--small button--pill">
     {{ m.text }}
-    <span aria-hidden="true">{{ metadata.symbols.external }}</span>
+    <span aria-hidden="true">⬇</span>
   </a>
 {% endfor %}
       </div>

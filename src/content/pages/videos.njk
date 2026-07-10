@@ -6,8 +6,10 @@ image: /images/wp-content/uploads/2021/08/whitestone-logo.webp
 permalink: /videos/
 ---
 {% import "partials/breadcrumb.njk" as bc %}
+
 <article class="page-shell page-shell--wide media-library">
   {{ bc.render(page, title, metadata, none) }}
+  
   <header class="page-header">
     <p class="eyebrow">Whitestone Screenings</p>
     <h1>{{ title }}</h1>
@@ -16,19 +18,30 @@ permalink: /videos/
 
   <section class="media-grid" aria-label="Video Library">
     {% for video in videos.list %}
-      {% set idOnly = video.url.split('v=')[1].split('&')[0] %}
+      {% set rawUrl = video.url %}
+      {% set videoId = rawUrl | replace('https://www.youtube.com/watch?v=', '') | replace('https://youtu.be/', '') | replace('http://www.youtube.com/watch?v=', '') | replace('http://youtu.be/', '') %}
+      {% set videoId = videoId | replace('&list=', '&') %}
+      
+      {% if videoId.indexOf('&') > -1 %}
+        {% set videoId = videoId.slice(0, videoId.indexOf('&')) %}
+      {% endif %}
+      
       <article class="media-card media-card--video reveal">
         <button
           type="button"
           class="media-card__thumb"
-          data-video-trigger
-          data-video-id="{{ idOnly }}"
+          data-video-id="{{ videoId }}"
           data-video-title="{{ video.title }}"
           aria-label="Play {{ video.title }}"
         >
-          <img src="https://i.ytimg.com/vi/{{ idOnly }}/hqdefault.jpg" alt="{{ video.title }}" loading="lazy">
+          <img 
+            src="https://i.ytimg.com/vi/{{ videoId }}/hqdefault.jpg" 
+            alt="{{ video.title }}" 
+            loading="lazy"
+          >
           <span class="media-card__play" aria-hidden="true"></span>
         </button>
+        
         <div class="media-card__body">
           <h2>{{ video.title }}</h2>
           <p>{{ video.description }}</p>
@@ -40,52 +53,63 @@ permalink: /videos/
   </section>
 </article>
 
-<div id="video-modal" class="video-modal" aria-hidden="true">
-  <div class="video-modal__backdrop" data-video-close></div>
-  <div class="video-modal__panel" role="dialog" aria-modal="true" aria-label="Video player">
-    <button type="button" class="video-modal__close" data-video-close aria-label="Close video">&times;</button>
-    <div class="video-modal__ratio">
-      <div id="video-modal-frame"></div>
+<div id="video-modal" class="video-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:99999; background:rgba(0,0,0,0.9);">
+  <div class="video-modal__backdrop" data-video-close style="position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;"></div>
+  
+  <div class="video-modal__panel" role="dialog" aria-modal="true" aria-label="Video player" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:900px; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 25px 80px rgba(0,0,0,0.9); z-index:10;">
+    <button 
+      type="button" 
+      class="video-modal__close" 
+      data-video-close 
+      aria-label="Close video"
+      style="position:absolute; top:12px; right:12px; z-index:20; background:rgba(0,0,0,0.8); color:#fff; border:2px solid rgba(255,255,255,0.3); font-size:28px; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; font-family:sans-serif; line-height:1;"
+      onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1.1)';"
+      onmouseout="this.style.background='rgba(0,0,0,0.8)'; this.style.transform='scale(1)';"
+    >&times;</button>
+    
+    <div class="video-modal__ratio" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#000;">
+      <div id="video-modal-frame" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
     </div>
   </div>
 </div>
 
 <script>
-  const videoModal = document.getElementById('video-modal');
-  const videoFrame = document.getElementById('video-modal-frame');
-  const videoTriggers = document.querySelectorAll('[data-video-trigger]');
-  const videoCloseActions = document.querySelectorAll('[data-video-close]');
-
-  function openVideoModal(videoId) {
-    const connector = videoId.includes('?') ? '&' : '?';
-    videoFrame.innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${videoId}${connector}autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-
-    videoModal.classList.add('is-active');
-    videoModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeVideoModal() {
-    videoModal.classList.remove('is-active');
-    videoModal.setAttribute('aria-hidden', 'true');
-    videoFrame.innerHTML = '';
-    document.body.style.overflow = 'auto';
-  }
-
-  videoTriggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => {
-      openVideoModal(trigger.dataset.videoId || '');
-    });
-  });
-
-  videoCloseActions.forEach((closeAction) => {
-    closeAction.addEventListener('click', closeVideoModal);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeVideoModal();
+  (function() {
+    var modal = document.getElementById('video-modal');
+    var frame = document.getElementById('video-modal-frame');
+    
+    function openVideo(id) {
+      if (!id) return;
+      frame.innerHTML = '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>';
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
     }
-  });
+    
+    function closeVideo() {
+      modal.style.display = 'none';
+      frame.innerHTML = '';
+      document.body.style.overflow = 'auto';
+    }
+    
+    var triggers = document.querySelectorAll('[data-video-id]');
+    for (var i = 0; i < triggers.length; i++) {
+      triggers[i].addEventListener('click', function() {
+        openVideo(this.getAttribute('data-video-id'));
+      });
+    }
+    
+    var closers = document.querySelectorAll('[data-video-close]');
+    for (var i = 0; i < closers.length; i++) {
+      closers[i].addEventListener('click', closeVideo);
+    }
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeVideo();
+    });
+    
+    var backdrop = document.querySelector('.video-modal__backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', closeVideo);
+    }
+  })();
 </script>

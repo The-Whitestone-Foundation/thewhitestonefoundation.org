@@ -33,7 +33,8 @@ mission:
     We are committed to open access because knowledge hoarded is knowledge wasted. We are committed to critical thinking because the alternative is the algorithm. And we are committed to education's transformation because the institution that produced the modern world cannot coast through its most disruptive century unchanged.
   button: 
      - text: Knowledge Futures
-       url: "#"
+       url: "/docs/Knowledge-Futures-for-the-21st-Century.pdf"
+       download: true
 
   
   stats:
