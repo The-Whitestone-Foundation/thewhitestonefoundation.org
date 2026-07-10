@@ -1,0 +1,16 @@
+---
+layout: false
+permalink: /publications/metadata.json
+eleventyExcludeFromCollections: true
+---
+{%- set works = [] -%}
+{%- for node in schema["@graph"] -%}
+  {%- if node["@id"] == "https://thewhitestonefoundation.org/#publisher" -%}
+    {%- for pub in node.publishes -%}
+      {%- if pub["@type"] == "ScholarlyArticle" -%}
+        {%- set works = (works.push(pub), works) -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{{ { "@context": "https://schema.org", "@graph": works } | dump(2) | safe }}

@@ -193,7 +193,11 @@ footer:
     - title: "Esthesis"
       url: "https://esthesis.org"
     - title: "Wild Globalization"
-      url: "https://wildglobalization.org"  
+      url: "https://wildglobalization.com"
+    - title: "Journey Wild Globalization"
+      url: "https://journey.wildglobalization.com"
+    - title: "Explore Wild Globalization"
+      url: "https://explore.wildglobalization.com"  
   manager:
     name: "Adam DJ Brett"
     url: "https://adamdjbrett.com"

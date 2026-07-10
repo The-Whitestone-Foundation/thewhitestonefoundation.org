@@ -1,0 +1,39 @@
+{#
+  Zotero / Highwire / PRISM citation metadata.
+  Depends on prefix="zotero: http://www.zotero.org/namespaces/export#" on <html> in base.njk;
+  without that declaration the translator cannot resolve the zotero: prefix.
+
+  citation_title and citation_journal_title are deliberately absent: the former makes Zotero's
+  translator guess journalArticle, the latter forces it. The title travels via og:title/dc:title.
+#}
+{% set zoteroIsPost = "posts" in (tags or []) %}
+{% set zoteroCanonical = { page: page, metadata: metadata, canonical_url: canonical_url } | canonicalUrl %}
+{% set zoteroProfile = collections.teamProfiles | teamProfile(author) %}
+{% if zoteroProfile %}
+  {% set zoteroAuthor = zoteroProfile.data.name %}
+{% elif author and author != "admin" %}
+  {% set zoteroAuthor = author | titleCaseTerm %}
+{% else %}
+  {% set zoteroAuthor = metadata.author.name %}
+{% endif %}
+{% set zoteroDate = date or page.date %}
+{% set zoteroDescription = { description: description, metadata: metadata } | headDescription %}
+{% if not (noindex or metadata.noindex) %}
+  <meta property="zotero:itemType" content="{% if zoteroIsPost %}blogPost{% else %}webPage{% endif %}">
+  <meta property="dc:title" content="{{ title or metadata.site_title }}">
+  <meta property="dc:creator" content="{{ zoteroAuthor }}">
+  {% if zoteroDate %}<meta property="dc:date" content="{{ zoteroDate | htmlDateString }}">{% endif %}
+  <meta property="dc:language" content="{{ metadata.language or 'en' }}">
+  <meta property="dc:identifier" content="{{ zoteroCanonical }}">
+  <meta property="dc:publisher" content="Whitestone Publications">
+  {% if zoteroDescription %}<meta property="dc:description" content="{{ zoteroDescription }}">{% endif %}
+  <meta name="citation_author" content="{{ zoteroAuthor }}">
+  {% if zoteroDate %}<meta name="citation_publication_date" content="{{ zoteroDate | htmlDateString }}">{% endif %}
+  <meta name="citation_public_url" content="{{ zoteroCanonical }}">
+  <meta name="citation_language" content="{{ metadata.language or 'en' }}">
+  {% if doi %}<meta name="citation_doi" content="{{ doi }}">{% endif %}
+  {% if zoteroIsPost %}
+  <meta name="prism.genre" content="blogentry">
+  <meta name="prism.publicationName" content="{{ metadata.site_title }}">
+  {% endif %}
+{% endif %}

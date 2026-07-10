@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ lang | default(metadata.defaultLanguage or metadata.language) }}">
+<html lang="{{ lang | default(metadata.defaultLanguage or metadata.language) }}" prefix="zotero: http://www.zotero.org/namespaces/export#">
   {% include "partials/head.njk" %}
   <body>
     <a href="#document" class="skip-link">{{ metadata.labels.skip_link }}</a>

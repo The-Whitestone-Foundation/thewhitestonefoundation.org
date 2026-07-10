@@ -146,6 +146,13 @@ export default async function (eleventyConfig) {
   eleventyConfig.addFilter('md', (value) => md.render(String(value || '')));
   eleventyConfig.addFilter('markdownify', (value) => md.render(String(value || '')));
   eleventyConfig.addFilter('titleCaseTerm', titleCaseTerm);
+  // Resolve a post's `author` key to its team profile, so bylines carry the person's real
+  // name and link to /team/<slug>/. titleCaseTerm alone mangles names like "adam-dj-brett".
+  eleventyConfig.addFilter('teamProfile', (profiles, authorKey) => {
+    if (!profiles || !authorKey) return null;
+    const key = slugify(authorKey);
+    return profiles.find((profile) => slugify(profile.data?.name || profile.fileSlug) === key) || null;
+  });
   eleventyConfig.addFilter('sortByLabel', sortByLabel);
   eleventyConfig.addFilter('firstName', firstName);
   eleventyConfig.addFilter('base64', base64);
@@ -201,6 +208,9 @@ export default async function (eleventyConfig) {
   );
   eleventyConfig.addFilter('canonicalUrl', (data = {}) => {
     const base = process.env.URL || data.metadata?.url || metadata.url;
+    // `canonical_url` front matter points syndicated posts back at the original publisher.
+    const override = String(data.canonical_url || '').trim();
+    if (override) return new URL(override, base).toString();
     return new URL(data.page?.url || '/', base).toString();
   });
 

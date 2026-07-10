@@ -1,7 +1,7 @@
 {% set pageTitle = { title: title, metadata: metadata } | headTitle %}
 {% set pageDescription = { description: description, metadata: metadata } | headDescription %}
 {% set pageImage = { image: image, metadata: metadata } | headImage | absUrl %}
-{% set canonical = { page: page, metadata: metadata } | canonicalUrl %}
+{% set canonical = { page: page, metadata: metadata, canonical_url: canonical_url } | canonicalUrl %}
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,10 @@
   <meta name="description" content="{{ pageDescription }}">
   <meta name="robots" content="{% if noindex or metadata.noindex %}noindex, nofollow{% else %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endif %}">
   <link rel="canonical" href="{{ canonical }}">
+  {% if page.url == "/publications/" %}
+  {# Expose per-page citation metadata (JSON-LD) for the three published works. #}
+  <link rel="describedby" type="application/ld+json" profile="https://schema.org/" href="{{ page.url }}metadata.json" />
+  {% endif %}
   {% if hero and hero.image %}
   {# Hero is a CSS background-image, so the browser can't discover its own priority; hint it explicitly since it's the page's LCP element. #}
   <link rel="preload" as="image" href="{{ hero.image }}" fetchpriority="high">
@@ -37,6 +41,7 @@
   <meta property="og:image" content="{{ pageImage }}">
   <meta property="og:image:alt" content="{{ imageAlt or title or metadata.seo.ogImage.alt or metadata.site_title }}">
   <meta name="twitter:card" content="{{ metadata.seo.twitter.card }}">
+  {% include "partials/zotero.njk" %}
   {% for script in metadata.head.script %}
   <script src="{{ script.src }}"{% if script.defer %} defer{% endif %}></script>
   {% endfor %}

@@ -3,6 +3,15 @@
 
 {% block content %}
 {% set postUrl = page.url | absUrl %}
+{% set authorProfile = collections.teamProfiles | teamProfile(author) %}
+{% set authorName = authorProfile.data.name if authorProfile else (author | titleCaseTerm) %}
+{% if authorProfile %}
+  {% set authorProfileUrl = authorProfile.page.url | absUrl %}
+  {# Matches the Person nodes already declared in _data/schema.json. #}
+  {% set authorNode = { "@type": "Person", "name": authorName, "@id": authorProfileUrl ~ "#person", "url": authorProfileUrl } %}
+{% else %}
+  {% set authorNode = { "@type": "Person", "name": authorName } %}
+{% endif %}
 {% set blogPosting = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -11,7 +20,7 @@
   "image": (image or metadata.image) | absUrl,
   "datePublished": date | isoDate,
   "dateModified": (updated or date) | isoDate,
-  "author": { "@type": "Person", "name": author | titleCaseTerm },
+  "author": authorNode,
   "publisher": { "@id": "https://thewhitestonefoundation.org/#organization" },
   "isPartOf": { "@id": "https://thewhitestonefoundation.org/#website" },
   "mainEntityOfPage": postUrl,
@@ -30,7 +39,10 @@
     {% if description %}<p class="p-summary">{{ description }}</p>{% endif %}
     <div class="post-meta post-meta--full" aria-label="Post metadata">
       {% if author %}
-        <span>By <span class="p-author h-card">{{ author | titleCaseTerm }}</span></span>
+        <span>By
+          {% if authorProfile %}<a class="p-author h-card u-url" href="{{ authorProfile.page.url }}">{{ authorName }}</a>
+          {% else %}<span class="p-author h-card">{{ authorName }}</span>{% endif %}
+        </span>
       {% endif %}
       {% if categories and categories.length %}
         {% for category in categories %}

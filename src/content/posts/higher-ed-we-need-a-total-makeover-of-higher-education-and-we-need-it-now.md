@@ -1,7 +1,7 @@
 ---
 title: "Rethinking Higher Education Totally…"
 date: 2025-08-02T04:46:37+00:00
-author: admin
+author: carl-raschke
 categories:
   - higher-ed
 tags:

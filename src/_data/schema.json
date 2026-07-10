@@ -34,7 +34,8 @@
         "https://www.facebook.com/religioustheory",
         "https://www.instagram.com/JCRT_DU1",
         "https://bsky.app/profile/jcrt.org",
-        "https://mastodon.social/@jcrt"
+        "https://mastodon.social/@jcrt",
+        "https://works.hcommons.org/collections/whitestone"
       ],
       "publishingPrinciples": "https://thewhitestonefoundation.org/publications/",
       "member": [
@@ -99,12 +100,84 @@
           "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" }
         },
         {
-          "@type": "WebSite",
-          "@id": "https://wildglobalization.org/#publication",
+          "@type": "Blog",
+          "@id": "https://wildglobalization.com/#publication",
           "name": "Wild Globalization",
-          "url": "https://wildglobalization.org/",
+          "url": "https://wildglobalization.com/",
           "description": "A Whitestone Publications project researching ecological, cultural, technological, economic, and governance dimensions of globalization.",
           "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" }
+        },
+        {
+          "@type": "Blog",
+          "@id": "https://journey.wildglobalization.com/#publication",
+          "name": "Journey Wild Globalization",
+          "url": "https://journey.wildglobalization.com/",
+          "description": "A Wild Globalization blog tracing the project's ongoing research journey.",
+          "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "isPartOf": { "@id": "https://wildglobalization.com/#publication" }
+        },
+        {
+          "@type": "Course",
+          "@id": "https://explore.wildglobalization.com/#course",
+          "name": "Explore Wild Globalization",
+          "url": "https://explore.wildglobalization.com/",
+          "description": "A course-based exploration of the Wild Globalization project.",
+          "provider": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "isPartOf": { "@id": "https://wildglobalization.com/#publication" }
+        },
+        {
+          "@type": "ScholarlyArticle",
+          "@id": "https://doi.org/10.17613/5be3j-shm60",
+          "name": "Knowledge Futures for the 21st Century",
+          "headline": "Knowledge Futures for the 21st Century",
+          "url": "https://doi.org/10.17613/5be3j-shm60",
+          "identifier": "https://doi.org/10.17613/5be3j-shm60",
+          "datePublished": "2026-07-09",
+          "author": { "@id": "https://thewhitestonefoundation.org/team/carl-raschke/#person" },
+          "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "isPartOf": { "@id": "https://thewhitestonefoundation.org/#publisher" }
+        },
+        {
+          "@type": "ScholarlyArticle",
+          "@id": "https://doi.org/10.17613/hxvcj-28y46",
+          "name": "The Productivity Paradox: How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era",
+          "headline": "The Productivity Paradox: How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era",
+          "url": "https://doi.org/10.17613/hxvcj-28y46",
+          "identifier": "https://doi.org/10.17613/hxvcj-28y46",
+          "datePublished": "2026-07-09",
+          "author": { "@id": "https://thewhitestonefoundation.org/team/carl-raschke/#person" },
+          "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "publisherImprint": "Whitestone Publications",
+          "contentLocation": {
+            "@type": "Place",
+            "name": "Boulder, CO"
+          },
+          "isPartOf": { "@id": "https://thewhitestonefoundation.org/#publisher" }
+        },
+        {
+          "@type": "ScholarlyArticle",
+          "@id": "https://doi.org/10.17613/amry9-r7671",
+          "name": "Critical Thinking in the Age of AI: An Integrated Symposium Prospectus",
+          "headline": "Critical Thinking in the Age of AI: An Integrated Symposium Prospectus",
+          "url": "https://doi.org/10.17613/amry9-r7671",
+          "identifier": "https://doi.org/10.17613/amry9-r7671",
+          "datePublished": "2026-07-09",
+          "author": [
+            { "@id": "https://thewhitestonefoundation.org/team/adam-dj-brett/#person" },
+            { "@id": "https://thewhitestonefoundation.org/team/carl-raschke/#person" },
+            {
+              "@type": "Person",
+              "name": "Jordan Loewen-Colon"
+            }
+          ],
+          "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "publisherImprint": "Whitestone Publications",
+          "contentLocation": {
+            "@type": "Place",
+            "name": "Boulder, CO"
+          },
+          "isPartOf": { "@id": "https://thewhitestonefoundation.org/#publisher" }
         }
       ]
     },
