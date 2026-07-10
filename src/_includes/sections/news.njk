@@ -17,7 +17,7 @@
         <article class="news-card reveal">
           <a href="{{ item.url }}">
             <div class="news-card__image">
-              <img src="{% if loop.index0 == 0 %}{{ images.symposium }}{% else %}{{ images.campus }}{% endif %}" alt="{{ item.data.title }}" loading="lazy">
+              <img src="{{ item.data.image or images.symposium }}" alt="{{ item.data.title }}" loading="lazy">
             </div>
             <div class="post-meta">
               <span>{% if item.data.categories and item.data.categories.length %}{{ item.data.categories[0] }}{% else %}{{ metadata.labels.news }}{% endif %}</span>

@@ -6,6 +6,9 @@ author: carl-raschke
 categories:
   - academia
 tags:
+  - symposia
+  - knowledge-economy
+  - education
 image: /images/wp-content/uploads/2021/08/whitestone-logo.webp
 permalink: /academia/announcing-whitestone-thought-leader-symposia/
 ---
