@@ -1,6 +1,6 @@
 ---
 title: "The grim financial reckoning of American higher education is now upon us"
-description: 'Yet a bold and courageous rethink of what the "college experience" really means can rescue it from disaster'
+description: "Yet a bold and courageous rethink of what the “college experience” really means can rescue it from disaster"
 date: 2026-04-19T12:00:00-06:00
 tags: [higher-education, university-finance, online-learning, artificial-intelligence]
 canonical_url: https://www.thegloboscope.com/p/the-grim-financial-reckoning-of-american
