@@ -31,6 +31,14 @@ All dynamic content and global site data are managed via **Sveltia CMS**:
 
 ---
 
+## 🖼 Image Credits
+
+- Homepage hero image (`/images/getty-images-ZBuxbdFzh2c-unsplash.webp`): photo by [Getty Images](https://unsplash.com/@gettyimages) on [Unsplash](https://unsplash.com/). Licensed under the Unsplash+ License.
+- Explore Wild Globalization card image (`/images/getty-images-NANjlLsEuXo-unsplash0web.webp`): photo by [Getty Images](https://unsplash.com/@gettyimages) on [Unsplash](https://unsplash.com/). Licensed under the Unsplash+ License.
+- Full image credits for the site are published at [thewhitestonefoundation.org/credits.txt](https://thewhitestonefoundation.org/credits.txt).
+
+---
+
 ### Project and Help
 
 Need help or have project ?? Contact Me
