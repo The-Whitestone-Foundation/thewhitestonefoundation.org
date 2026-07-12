@@ -7,6 +7,6 @@ permalink: /publications/
 
 - [What Is the Whitestone Foundation? “Knowledge Futures for the 21st Century” A Prospectus](/docs/Knowledge-Futures-for-the-21st-Century.pdf), [doi: 10.17613/5be3j-shm60](https://doi.org/10.17613/5be3j-shm60)
 
-- [Critical Thinking in the Age of AI: An Integrated Symposium Prospectus](/docs/Critical-Thinking-in-the-Age-of-AI-Pub.pdf), [doi: 10.17613/amry9-r7671](https://doi.org/10.17613/amry9-r7671)
+- [Critical Thinking in the Age of AI: An Integrated Symposium Prospectus](/docs/Critical-Thinking-in-the-Age-of-AI-Pub.pdf), [doi: 10.17613/x5gs5-nvy18](https://doi.org/10.17613/x5gs5-nvy18)
 
 - [The Productivity Paradox How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era](/docs/the-productivity-paradox.pdf)
