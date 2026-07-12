@@ -137,7 +137,7 @@ supportSection:
   step1: "Step 1 - Choose your impact"
   step2: "Step 2 - Select your contribution"
   buttonText: "Make Your Contribution"
-  footnote: "The Whitestone Foundation is a 501(c)(3). Your donation may be tax-deductible."
+  footnote: "The Whitestone Foundation is a 501(c)3 non-profit corporation registered in the state of Colorado. Your donation is tax-deductible."
 impactAreas:
   - icon: brain
     label: "Knowledge Futures"
