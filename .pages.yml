@@ -1,0 +1,162 @@
+media:
+  input: src/static/images
+  output: /images
+  categories: [image]
+  rename: safe
+
+content:
+  - name: home
+    label: Home page
+    type: file
+    path: src/content/index.md
+    format: code
+
+  - name: news
+    label: News posts
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Description, type: text }
+      - { name: date, label: Publication date, type: date, required: true }
+      - { name: author, label: Author, type: string }
+      - { name: image, label: Featured image, type: image }
+      - { name: categories, label: Categories, type: string, list: true }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: canonical_url, label: Canonical URL, type: string }
+      - { name: permalink, label: Permalink, type: string }
+      - { name: body, label: Body, type: rich-text, required: true }
+
+  - name: pages
+    label: Static pages
+    type: collection
+    path: src/content/pages
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    exclude: [credits.txt.njk, panelists.njk, publications-metadata.njk, videos.njk]
+    view:
+      primary: title
+      sort: title
+    fields:
+      - { name: layout, type: string, default: page.njk, hidden: true }
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Description, type: text }
+      - { name: author, label: Author, type: string }
+      - { name: date, label: Date, type: date }
+      - { name: categories, label: Categories, type: string, list: true }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: image, label: Featured image, type: image }
+      - { name: permalink, label: Permalink, type: string, required: true }
+      - { name: body, label: Body, type: rich-text, required: true }
+
+  - name: team
+    label: Active team
+    type: collection
+    path: src/content/team
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      primary: name
+      sort: name
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: role, label: Role, type: string, required: true }
+      - { name: photo, label: Photo, type: image }
+      - { name: email, label: Email, type: string }
+      - { name: orcid, label: ORCID, type: string }
+      - { name: description, label: Summary, type: text, required: true }
+      - { name: body, label: Biography, type: rich-text, required: true }
+
+  - name: alumni
+    label: Team alumni
+    type: collection
+    path: src/content/team/alumni
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      primary: name
+      sort: name
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: role, label: Role, type: string, default: Alumni }
+      - { name: photo, label: Photo, type: image }
+      - { name: email, label: Email, type: string }
+      - { name: orcid, label: ORCID, type: string }
+      - { name: description, label: Summary, type: text, required: true }
+      - { name: body, label: Biography, type: rich-text, required: true }
+
+  - name: panelists
+    label: Panelists
+    type: file
+    path: src/_data/panelists.yaml
+    format: yaml
+    fields:
+      - name: list
+        label: Panelists
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Name, type: string, required: true }
+          - { name: photo, label: Photo, type: image }
+          - { name: description, label: Biography, type: rich-text, required: true }
+
+  - name: publications
+    label: Publications
+    type: file
+    path: src/_data/publications.yaml
+    format: yaml
+    fields:
+      - name: section
+        label: Section heading
+        type: object
+        fields:
+          - { name: eyebrow, label: Eyebrow, type: string }
+          - { name: title, label: Title, type: string }
+          - { name: titleSpan, label: Highlighted title, type: string }
+          - { name: description, label: Description, type: text }
+      - name: list
+        label: Publications
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: abbr, label: Abbreviation, type: string }
+          - { name: description, label: Description, type: text }
+          - { name: url, label: URL, type: string, required: true }
+          - { name: image, label: Image, type: image }
+
+  - name: videos
+    label: Videos
+    type: file
+    path: src/_data/videos.yaml
+    format: yaml
+    fields:
+      - name: list
+        label: Videos
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: url, label: URL, type: string, required: true }
+          - { name: description, label: Description, type: text }
+
+  - name: site
+    label: Site settings
+    type: file
+    path: src/_data/metadata.yaml
+    format: code

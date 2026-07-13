@@ -1,7 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ef345c83-b57e-4f35-8cf2-083badc51feb/deploy-status)](https://app.netlify.com/projects/thewhitestonefoundation/deploys)
 # The Whitestone Foundation Website
 
-This repository contains the source code for The Whitestone Foundation website, built with Eleventy (11ty) and managed via Sveltia CMS.
+This repository contains the source code for The Whitestone Foundation website, built with Eleventy (11ty) and managed via [Pages CMS](https://pagescms.org/).
 
 A project develop by [Adam Dj Brett](https://adamdjbrett.com)
 
@@ -22,7 +22,7 @@ All list-page settings (index, authors list, archive titles, and descriptions) a
 - **Purpose**: Controlling list layouts, SEO titles, and page-specific metadata.
 
 ### Content & Data
-All dynamic content and global site data are managed via **Sveltia CMS**:
+Dynamic content and global site data are managed through Pages CMS using `.pages.yml`:
 - **Blog Posts**: Managed in `content/posts/`
 - **Author Profiles**: Managed in `content/authors/`
 - **Site Metadata**: Managed in `_data/metadata.yaml`

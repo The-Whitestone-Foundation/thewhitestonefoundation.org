@@ -9,4 +9,4 @@ permalink: /publications/
 
 - [Critical Thinking in the Age of AI: An Integrated Symposium Prospectus](/docs/Critical-Thinking-in-the-Age-of-AI-Pub.pdf), [doi: 10.17613/x5gs5-nvy18](https://doi.org/10.17613/x5gs5-nvy18)
 
-- [The Productivity Paradox How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era](/docs/the-productivity-paradox.pdf)
+- [The Productivity Paradox How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era](/docs/the-productivity-paradox.pdf) [doi: 10.17613/hxvcj-28y46](https://doi.org)
