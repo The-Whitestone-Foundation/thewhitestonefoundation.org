@@ -4,7 +4,7 @@ role: "Co-Founder, Secretary-Treasurer"
 photo: "/images/carl-raschke-sm2.webp"
 email: carl@thewhitestonefoundation.org
 #orcid:
-description: "Co-Founder and Secretary-Treasurer; Professor of Philosophy of Religion at the University of Denver and author of twenty-plus books on theology and society."
+description: "Co-Founder and Secretary-Treasurer; Professor of Philosophy of Religion at the University of Denver and author of twenty-plus books on philosophy and society."
 ---
 
 Carl Raschke is an internationally recognized scholar, writer, and thought leader whose work spans philosophy, political theology, globalization, and the future of the university. He is Professor of Philosophy of Religion at the University of Denver, where he previously chaired the department and directed its MA program, and was named University Lecturer for 2020-21. He has authored more than twenty books and over a thousand articles, and is frequently interviewed on postmodernism, global politics, religion, technology, and society.
