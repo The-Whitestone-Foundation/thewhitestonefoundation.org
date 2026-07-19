@@ -1,0 +1,3 @@
+[submodule "vendor/knowledge-as-infrastructure"]
+	path = vendor/knowledge-as-infrastructure
+	url = https://github.com/The-Whitestone-Foundation/knowledge-as-infrastructure.git

@@ -14,9 +14,10 @@
     "sequoia:publish:dry": "npm run sequoia:stage && npx -y sequoia-cli publish --dry-run",
     "sequoia:sync": "npm run sequoia:stage && npx -y sequoia-cli sync --update-frontmatter",
     "build:site": "cross-env ELEVENTY_ENV=production eleventy",
+    "build:publication": "npm ci --prefix vendor/knowledge-as-infrastructure && cross-env ELEVENTY_ENV=production SITE_URL=https://thewhitestonefoundation.org PUBLICATION_PATH=/publications/okf-knowledge-context npm --prefix vendor/knowledge-as-infrastructure run build && shx mkdir -p _site/publications/okf-knowledge-context && shx cp -r vendor/knowledge-as-infrastructure/_site/. _site/publications/okf-knowledge-context",
     "build:search": "pagefind --site _site --output-subdir pagefind",
     "build:assets": "esbuild _site/assets/css/index.css --minify --allow-overwrite --outfile=_site/assets/css/index.css && esbuild _site/assets/js/index.js --minify --allow-overwrite --outfile=_site/assets/js/index.js",
-    "build": "npm run clean && npm run sequoia:stage && npm run build:site && npm run build:assets && npm run build:search",
+    "build": "npm run clean && npm run sequoia:stage && npm run build:site && npm run build:assets && npm run build:publication && npm run build:search",
     "start": "npm run dev"
   },
   "devDependencies": {

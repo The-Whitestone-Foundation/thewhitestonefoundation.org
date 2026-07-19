@@ -5,6 +5,18 @@ This repository contains the source code for The Whitestone Foundation website, 
 
 A project develop by [Adam Dj Brett](https://adamdjbrett.com)
 
+## Embedded publication releases
+
+The site includes [`knowledge-as-infrastructure`](https://github.com/The-Whitestone-Foundation/knowledge-as-infrastructure) as a pinned Git submodule and publishes it at `/publications/okf-knowledge-context/`.
+
+Clone the complete site with `git clone --recurse-submodules`, or initialize an existing clone with `git submodule update --init --recursive`.
+
+To release a publication update:
+
+1. Merge and push the publication changes to its `main` branch.
+2. In this repository, run `git submodule update --remote vendor/knowledge-as-infrastructure` and commit the updated submodule pointer.
+3. Push the foundation branch, verify the Netlify deploy preview, and merge it.
+
 ### Project and Help
 
 Need help or have project ?? Contact Me
