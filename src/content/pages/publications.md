@@ -12,3 +12,5 @@ permalink: /publications/
 - [The Productivity Paradox How Assessment Regimes and Bureaucratic Inertia Forestall the Development of Critical Intelligence in the AI Era](/docs/the-productivity-paradox.pdf) &#124; [doi: 10.17613/hxvcj-28y46](https://doi.org/hxvcj-28y46)
 
 - [From Knowledge to Context: Building a Google Open Knowledge Format Pipeline That Feeds a Local, Private MCP](/publications/okf-knowledge-context/) &#124; [10.5281/zenodo.21437712](https://doi.org/10.5281/zenodo.21437712)
+
+- [Private Wealth Governance in a Wild Twenty-first Century.](/docs/bedford-wild-globalization-private-wealth-governance.pdf)&#124; [/10.17613/t1yet-rm746](https://doi.org/10.17613/t1yet-rm746).
