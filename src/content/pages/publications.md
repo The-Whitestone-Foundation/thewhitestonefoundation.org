@@ -13,4 +13,4 @@ permalink: /publications/
 
 - [From Knowledge to Context: Building a Google Open Knowledge Format Pipeline That Feeds a Local, Private MCP](/publications/okf-knowledge-context/) &#124; [10.5281/zenodo.21437712](https://doi.org/10.5281/zenodo.21437712)
 
-- [Private Wealth Governance in a Wild Twenty-first Century](/docs/bedford-wild-globalization-private-wealth-governance.pdf) &#124; [10.17613/t1yet-rm746](https://doi.org/10.17613/t1yet-rm746).
+- [Private Wealth Governance in a Wild Twenty-first Century](/docs/bedford-wild-globalization-private-wealth-governance.pdf) &#124; [10.17613/t1yet-rm746](https://doi.org/10.17613/t1yet-rm746). [Slides](https://doi.org/10.17613/8dgv7-h7972)
