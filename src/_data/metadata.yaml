@@ -172,7 +172,7 @@ footer:
     - label: "Contact"
       url: "/contact/"
     - label: "Metasearch"
-      url: "/metasearch/"
+      url: "/metadata/search/"
     - label: "News"
       url: "/news/"
     - label: "People"

@@ -108,21 +108,39 @@
           "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" }
         },
         {
-          "@type": "Blog",
-          "@id": "https://journey.wildglobalization.com/#publication",
-          "name": "Journey Wild Globalization",
+          "@type": "Course",
+          "@id": "https://journey.wildglobalization.com/#course",
+          "name": "Wild Globalization Pilot",
           "url": "https://journey.wildglobalization.com/",
-          "description": "A Wild Globalization blog tracing the project's ongoing research journey.",
+          "description": "A free five-chapter, 26-lesson course on the wild forces shaping human life, from early survival to modern globalization, from small groups to global systems, from human intelligence to AI.",
+          "inLanguage": "en",
+          "isAccessibleForFree": true,
+          "author": { "@id": "https://thewhitestonefoundation.org/team/gary-bedford/#person" },
+          "provider": { "@id": "https://thewhitestonefoundation.org/#publisher" },
           "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
-          "isPartOf": { "@id": "https://wildglobalization.com/#publication" }
+          "isPartOf": { "@id": "https://wildglobalization.com/#publication" },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "category": "Free",
+            "availability": "https://schema.org/InStock",
+            "url": "https://wildglobalization.thinkific.com/enroll/3674011"
+          },
+          "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "online",
+            "courseWorkload": "PT10H"
+          }
         },
         {
-          "@type": "Course",
-          "@id": "https://explore.wildglobalization.com/#course",
+          "@type": "Blog",
+          "@id": "https://explore.wildglobalization.com/#publication",
           "name": "Explore Wild Globalization",
           "url": "https://explore.wildglobalization.com/",
-          "description": "A course-based exploration of the Wild Globalization project.",
-          "provider": { "@id": "https://thewhitestonefoundation.org/#publisher" },
+          "description": "Concise, insightful explorations into the complex world of 21st-century globalization and ecology, published alongside the Wild Globalization series.",
+          "inLanguage": "en",
+          "author": { "@id": "https://thewhitestonefoundation.org/team/gary-bedford/#person" },
           "publisher": { "@id": "https://thewhitestonefoundation.org/#publisher" },
           "isPartOf": { "@id": "https://wildglobalization.com/#publication" }
         },
@@ -209,6 +227,13 @@
       "image": "https://thewhitestonefoundation.org/images/gary-bedford.webp",
       "email": "gary@thewhitestonefoundation.org",
       "description": "Vice President and Board Member leading the Wild Globalization Project, researching civilization's ecological, cultural, and economic turning points.",
+      "url": "https://www.garybedford.com/",
+      "sameAs": [
+        "https://www.garybedford.com/",
+        "https://wildglobalization.com/",
+        "https://explore.wildglobalization.com/",
+        "https://journey.wildglobalization.com/"
+      ],
       "worksFor": { "@id": "https://thewhitestonefoundation.org/#organization" }
     },
     {
