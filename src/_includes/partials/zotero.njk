@@ -8,11 +8,12 @@
 #}
 {% set zoteroIsPost = "posts" in (tags or []) %}
 {% set zoteroCanonical = { page: page, metadata: metadata, canonical_url: canonical_url } | canonicalUrl %}
-{% set zoteroProfile = collections.teamProfiles | teamProfile(author) %}
+{% set authorSlug = author.slug or author %}
+{% set zoteroProfile = collections.teamProfiles | teamProfile(authorSlug) %}
 {% if zoteroProfile %}
   {% set zoteroAuthor = zoteroProfile.data.name %}
 {% elif author and author != "admin" %}
-  {% set zoteroAuthor = author | titleCaseTerm %}
+  {% set zoteroAuthor = author.name or (author | titleCaseTerm) %}
 {% else %}
   {% set zoteroAuthor = metadata.author.name %}
 {% endif %}

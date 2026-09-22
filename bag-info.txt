@@ -1,0 +1,8 @@
+Source-Organization: The Whitestone Foundation
+Contact-Name: Adam DJ Brett
+Contact-Email: adam@adamdjbrett.com
+External-Description: Source for thewhitestonefoundation.org, the public site of The Whitestone Foundation (dba Whitestone Publications): mission, publications, programs and news.
+External-Identifier: https://github.com/The-Whitestone-Foundation/thewhitestonefoundation.org
+External-Identifier: https://thewhitestonefoundation.org/
+Bag-Group-Identifier: The Whitestone Foundation
+Bag-Count: 1 of 1
