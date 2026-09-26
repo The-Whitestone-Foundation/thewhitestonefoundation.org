@@ -1,6 +1,6 @@
 ---
 layout: page.njk
-title: White Papers
+title: "White Papers & Other Publications"
 description: At the heart of the Knowledge Futures initiative is an ongoing series of whitepapers bringing the latest curated literature research on the developments in the knowledge economy.
 permalink: /publications/
 ---
@@ -14,3 +14,5 @@ permalink: /publications/
 - [From Knowledge to Context: Building a Google Open Knowledge Format Pipeline That Feeds a Local, Private MCP](/publications/okf-knowledge-context/) &#124; [10.5281/zenodo.21437712](https://doi.org/10.5281/zenodo.21437712)
 
 - [Private Wealth Governance in a Wild Twenty-first Century](/docs/bedford-wild-globalization-private-wealth-governance.pdf) &#124; [10.17613/t1yet-rm746](https://doi.org/10.17613/t1yet-rm746). [Slides](https://doi.org/10.17613/8dgv7-h7972)
+
+- Raschke, Carl. “Why Artificial Intelligence Is Helpless Without the Humanities”. Presented at the Artificial Intelligence and the Humanities: Critical Thinking in the Algorithmic Era (AIH), Brazil, September 1, 2026. https://doi.org/10.17613/2q469-4hr11.
